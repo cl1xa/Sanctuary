@@ -11,7 +11,7 @@ namespace big
 		ImGui::SetNextWindowSize(ImVec2{ 750, 400 }, ImGuiCond_Once);
 		ImGui::SetNextWindowPos(ImVec2{ 100, 200 }, ImGuiCond_Once);
 
-		tabs = tabs = { "Kick", "Sync", "Crash", "Misc", "Session", "Settings"};
+		tabs = tabs = { "Kick", "Crash", "Sync", "Misc", "Session", "Settings"};
 
 		if (ImGui::Begin("Sanctuary", &g_gui.m_opened, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize))
 		{
@@ -37,14 +37,14 @@ namespace big
 					//Control events
 					break;
 
-				case 1: //Sync
-					ImGui::Text("Not implemented yet");
-					break;
-
-				case 2: //Crash
+				case 1: //Crash
 					ImGui::Checkbox("NET_ARRAY_HANDLER", &g_config.protection.crash.net_array_handler);
 					ImGui::Checkbox("SCRIPT_WORLD_STATE", &g_config.protection.crash.script_world_state);
 					ImGui::Checkbox("TASK_VEHICLE_TEMP_ACTION", &g_config.protection.crash.task_vehicle_temp_action);
+					break;
+
+				case 2: //Sync
+					ImGui::Text("Not implemented yet");
 					break;
 
 				case 3: //Misc
