@@ -52,6 +52,7 @@ namespace big
 					break;
 
 				case 3: //Misc
+					ImGui::Checkbox("Terminate loading screens", &g_config.protection.misc.terminate_loading_screens);
 					ImGui::Checkbox("Rate limit", &g_config.protection.misc.rate_limit);
 					ImGui::Checkbox("Modder detection", &g_config.protection.misc.modder_detection);
 					ImGui::Checkbox("Optimize session loading", &g_config.protection.misc.optimize_loading);
