@@ -58,7 +58,6 @@ namespace big
 		void player_leave(CNetGamePlayer* net_game_player);
 
 		void set_selected(player* plyr);
-
 	};
 
 	inline player_service* g_player_service{};

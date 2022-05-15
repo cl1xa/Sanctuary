@@ -50,11 +50,13 @@
 
 #include "logger.hpp"
 
-#include "core/globals.hpp"
+#include "config/config.hpp"
 #include "gta/natives.hpp"
 #include "CPed.hpp"
 
 #include "services/notification_service.hpp"
+
+using namespace std;
 
 namespace big
 {

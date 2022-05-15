@@ -1,5 +1,6 @@
 #include "views/view.hpp"
 #include "services/notification_service.hpp"
+#include "renderer.hpp"
 
 namespace big
 {
@@ -15,14 +16,13 @@ namespace big
 		int prevSpace = 0;
 		float total_size = 0.f;
 		std::vector<std::string> split_points;
+
 		for (int i = 0; i <= message.size(); i++)
 		{
-			std::string current_message = message.substr(j,  i - j);
+			std::string current_message = message.substr(j, i - j);
 
 			if (message.substr(i, 1) == " ")
-			{
 				prevSpace = i;
-			}
 
 			ImVec2 size = ImGui::CalcTextSize(current_message.c_str());
 
@@ -40,14 +40,16 @@ namespace big
 			}
 		}
 
-		dl->AddRectFilled({ (float)*g_pointers->m_resolution_x - 360.f, 10.f + start_pos }, { (float)*g_pointers->m_resolution_x - 10.f, start_pos + 45.f + total_size }, g->window.color);
+		dl->AddRectFilled({ (float)*g_pointers->m_resolution_x - 360.f, 10.f + start_pos }, { (float)*g_pointers->m_resolution_x - 10.f, start_pos + 45.f + total_size }, (ImU32)3357612055);
 		dl->AddRectFilledMultiColor({ (float)*g_pointers->m_resolution_x - 360.f, 10.f + start_pos }, { (float)*g_pointers->m_resolution_x - 255.f, start_pos + 45.f + total_size }, fadeBegin, fadeEnd, fadeEnd, fadeBegin);
 
-		dl->AddText(g->window.font_sub_title, 22.f, { (float)*g_pointers->m_resolution_x - 350.f, 15.f + start_pos }, textCol, title.c_str());
+		dl->AddText(g_renderer->m_font, 22.f, { (float)*g_pointers->m_resolution_x - 350.f, 15.f + start_pos }, textCol, title.c_str());
+
 		int i = 0;
+
 		for (std::string txt : split_points)
 		{
-			dl->AddText({ (float)*g_pointers->m_resolution_x - 350.f, 40.f + (i * 20.f) + start_pos}, textCol, txt.c_str());
+			dl->AddText({ (float)*g_pointers->m_resolution_x - 350.f, 40.f + (i * 20.f) + start_pos }, textCol, txt.c_str());
 			i++;
 		}
 

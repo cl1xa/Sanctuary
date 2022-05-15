@@ -44,8 +44,6 @@ namespace big
 
 		m_font = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(font_storopia), sizeof(font_storopia), 20.f, &font_cfg);
 
-		g->window.font_sub_title = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(font_storopia), sizeof(font_storopia), 30.f, &font_cfg);
-
 		g_gui.dx_init();
 		g_renderer = this;
 	}
@@ -100,31 +98,28 @@ namespace big
 
 	void renderer::wndproc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 	{
-		if (msg == WM_KEYUP && wparam == g->settings.hotkeys.menu_toggle)
+		if (msg == WM_KEYUP)
 		{
 			//Persist and restore the cursor position between menu instances.
 			static POINT cursor_coords{};
-			if (g_gui.m_opened)
-			{
-				GetCursorPos(&cursor_coords);
-			}
-			else if (cursor_coords.x + cursor_coords.y != 0)
-			{
-				SetCursorPos(cursor_coords.x, cursor_coords.y);
-			}
 
-			g_gui.m_opened = g->settings.hotkeys.editing_menu_toggle || !g_gui.m_opened;
-
-			if (g->settings.hotkeys.editing_menu_toggle)
-				g->settings.hotkeys.editing_menu_toggle = false;
+			switch (wparam)
+			{
+			case VK_DELETE:
+			case VK_INSERT:
+				if (g_gui.m_opened)
+					GetCursorPos(&cursor_coords);
+				else if (cursor_coords.x + cursor_coords.y != 0)
+					SetCursorPos(cursor_coords.x, cursor_coords.y);
+				g_gui.m_opened ^= true;
+				break;
+			case VK_END:
+				g_running = false;
+				break;
+			}
 		}
 
-		if (msg == WM_KEYUP && wparam == VK_END)
-			g_running = false;
-		
 		if (g_gui.m_opened)
-		{
 			ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam);
-		}
 	}
 }

@@ -13,20 +13,6 @@ namespace big::notify
 		HUD::END_TEXT_COMMAND_THEFEED_POST_TICKER(false, false);
 	}
 
-	// deprecated/unused
-	inline void blocked_event(const char* name, Player player)
-	{
-		char msg[128];
-
-		strcpy(msg, "~g~BLOCKED RECEIVED EVENT~s~\n~b~");
-		strcat(msg, name);
-		strcat(msg, "~s~\nFrom: <C>");
-		strcat(msg, PLAYER::GET_PLAYER_NAME(player));
-		strcat(msg, "</C>");
-
-		above_map(msg);
-	}
-
 	// Shows a busy spinner till the value at the address equals the value passed or if timeout is hit
 	inline void busy_spinner(std::string_view text, int* address, int value, int timeout = 15)
 	{
@@ -45,12 +31,5 @@ namespace big::notify
 		HUD::BEGIN_TEXT_COMMAND_DISPLAY_HELP("STRING");
 		HUD::ADD_TEXT_COMPONENT_SUBSTRING_PLAYER_NAME(text.data());
 		HUD::END_TEXT_COMMAND_DISPLAY_HELP(0, 0, 1, -1);
-	}
-
-	inline void player_joined(CNetGamePlayer* net_game_player)
-	{
-		above_map(
-			fmt::format("<C>{}</C> joined.", net_game_player->get_name())
-		);
 	}
 }

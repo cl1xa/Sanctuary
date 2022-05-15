@@ -11,9 +11,9 @@ namespace big
 		ImGui::SetNextWindowSize(ImVec2{ 750, 400 }, ImGuiCond_Once);
 		ImGui::SetNextWindowPos(ImVec2{ 100, 200 }, ImGuiCond_Once);
 
-		tabs = tabs = { "Network Events", "Script Events", "Object Sync", "Crash", "Misc", "Settings" };
+		tabs = tabs = { "Network Events", "Script Events", "Object Sync", "Crash", "Misc", "Session", "Settings" };
 
-		if (ImGui::Begin("Sanctuary", &g_gui.m_opened, ImGuiWindowFlags_NoCollapse))
+		if (ImGui::Begin("Sanctuary", &g_gui.m_opened, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize))
 		{
 			ImGui::Columns(2);
 			{
@@ -27,6 +27,7 @@ namespace big
 
 				ImGui::NextColumn();
 
+				//TODO: Do this properly lol, for now its just here as filler
 				switch (selected_tab)
 				{
 				case 0:
@@ -46,6 +47,11 @@ namespace big
 					break;
 				case 5:
 					ImGui::Text("6");
+					break;
+				case 6:
+					ImGui::Checkbox("Optimize session loading", &g_config.settings.optimize_loading);
+					ImGui::Checkbox("Notify players", &g_config.settings.notify_players);//Currently this only toggles one thing, but there is more that I can do.
+					ImGui::Checkbox("Notify debug", &g_config.settings.notify_debug);
 
 					if (ImGui::Button("Unload"))
 						g_running = false;

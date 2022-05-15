@@ -1,5 +1,4 @@
 ﻿#include "common.hpp"
-#include "core/globals.hpp"
 #include "fiber_pool.hpp"
 #include "gui.hpp"
 #include "logger.hpp"
@@ -24,6 +23,7 @@ BOOL APIENTRY DllMain(HMODULE hmod, DWORD reason, PVOID)
 		DisableThreadLibraryCalls(hmod);
 
 		g_hmodule = hmod;
+
 		g_main_thread = CreateThread(nullptr, 0, [](PVOID) -> DWORD
 		{
 			while (!FindWindow(L"grcWindow", L"Grand Theft Auto V"))
@@ -31,16 +31,14 @@ BOOL APIENTRY DllMain(HMODULE hmod, DWORD reason, PVOID)
 
 			std::filesystem::path base_dir = std::getenv("appdata");
 			base_dir /= "Sanctuary";
-			auto file_manager_instance = std::make_unique<file_manager>(base_dir);
 
-			auto globals_instance = std::make_unique<menu_settings>(
-				file_manager_instance->get_project_file("./settings.json")
-			);
+			auto file_manager_instance = std::make_unique<file_manager>(base_dir);
 
 			auto logger_instance = std::make_unique<logger>(
 				"Sanctuary",
 				file_manager_instance->get_project_file("./cout.log")
 			);
+
 			try
 			{
 				LOG(INFO) << "Sanctuary Initializing";
@@ -56,7 +54,8 @@ BOOL APIENTRY DllMain(HMODULE hmod, DWORD reason, PVOID)
 				auto hooking_instance = std::make_unique<hooking>();
 				LOG(INFO) << "Hooking initialized.";
 
-				g->load();
+				g_config.load("default.sanctuary");
+
 				LOG(INFO) << "Settings Loaded.";
 
 				auto thread_pool_instance = std::make_unique<thread_pool>();
@@ -81,7 +80,11 @@ BOOL APIENTRY DllMain(HMODULE hmod, DWORD reason, PVOID)
 				g_running = true;
 
 				while (g_running)
+				{
+					g_config.save("default.sanctuary");
+
 					std::this_thread::sleep_for(500ms);
+				}
 
 				g_hooking->disable();
 				LOG(INFO) << "Hooking disabled.";
@@ -124,15 +127,14 @@ BOOL APIENTRY DllMain(HMODULE hmod, DWORD reason, PVOID)
 			}
 
 			LOG(INFO) << "Farewell!";
+
 			logger_instance->destroy();
 			logger_instance.reset();
-
-			globals_instance.reset();
-
 			file_manager_instance.reset();
 
 			CloseHandle(g_main_thread);
 			FreeLibraryAndExitThread(g_hmodule, 0);
+
 		}, nullptr, 0, &g_main_thread_id);
 	}
 

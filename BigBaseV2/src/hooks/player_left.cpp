@@ -13,7 +13,8 @@ namespace big
 				<< "' freeing slot #" << (int)net_player->m_player_id
 				<< " with Rockstar ID: " << net_player_data->m_rockstar_id2;
 			
-			g_notification_service->push("Player Left", fmt::format("{} freeing slot #{} with Rockstar ID: {}", net_player_data->m_name, net_player->m_player_id, net_player_data->m_rockstar_id2));
+			if (g_config.settings.notify_players)
+				g_notification_service->push("Player Left", fmt::format("{} freeing slot #{} with Rockstar ID: {}", net_player_data->m_name, net_player->m_player_id, net_player_data->m_rockstar_id2));
 		}
 
 		return g_hooking->m_player_has_left_hook.get_original<decltype(&hooks::player_leave)>()(_this, net_player);
