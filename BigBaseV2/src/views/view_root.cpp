@@ -35,8 +35,8 @@ namespace big
 				switch (selected_tab)
 				{
 				case 0: //Kick
-					ImGui::Checkbox("Script events", &g_config.protection.kick.script_events);
-					ImGui::Checkbox("Game events", &g_config.protection.kick.game_events);
+					//ImGui::Checkbox("Script events", &g_config.protection.kick.script_events);
+					//ImGui::Checkbox("Game events", &g_config.protection.kick.game_events);
 					//Action events
 					//Control events
 					break;
