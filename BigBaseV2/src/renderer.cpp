@@ -117,8 +117,9 @@ namespace big
 			case VK_END:
 				g_running = false;
 				break;
-			}
 			#endif
+			}
+
 		}
 
 		if (g_gui.m_opened)
