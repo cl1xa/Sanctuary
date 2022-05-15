@@ -1,5 +1,9 @@
 #include "view.hpp"
 #include "gui.hpp"
+#include "fiber_pool.hpp"
+#include "gta/enums.hpp"
+#include "gta/session_types.hpp"
+#include "util/session.hpp"
 
 namespace big
 {
@@ -55,7 +59,17 @@ namespace big
 					break;
 
 				case 4: //Session
-					ImGui::Text("Not implemented yet");
+					for (const SessionType& session_type : sessions)
+					{
+						if (ImGui::MenuItem(session_type.name))
+						{
+							QUEUE_JOB_BEGIN_CLAUSE(&)
+							{
+								session::join_type(session_type);
+
+							}QUEUE_JOB_END_CLAUSE
+						}
+					}
 					break;
 
 				case 5: //Settings
