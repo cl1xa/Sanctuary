@@ -113,10 +113,12 @@ namespace big
 					SetCursorPos(cursor_coords.x, cursor_coords.y);
 				g_gui.m_opened ^= true;
 				break;
+			#ifdef _DEBUG
 			case VK_END:
 				g_running = false;
 				break;
 			}
+			#endif
 		}
 
 		if (g_gui.m_opened)
