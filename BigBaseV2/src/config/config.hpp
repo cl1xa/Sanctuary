@@ -34,6 +34,7 @@ namespace big
 
 			struct
 			{
+				bool rate_limit = false;
 				bool modder_detection = false;
 				bool event_protocol_cleanup = false;
 				bool optimize_loading = false;
