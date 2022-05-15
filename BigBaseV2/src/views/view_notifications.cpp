@@ -56,7 +56,7 @@ namespace big
 		return start_pos + 45.f + total_size;
 	}
 
-	void view::notifications()
+	void view_main::notifications()
 	{
 		ImDrawList* draw_list = ImGui::GetBackgroundDrawList();
 

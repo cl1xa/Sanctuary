@@ -8,7 +8,7 @@
 
 namespace big
 {
-	class view
+	class view_main
 	{
 	public:
 		static void notifications();
@@ -18,5 +18,16 @@ namespace big
 		{
 			notifications();
 		}
+	};
+
+	class view_sub
+	{
+	public:
+		static void tab_kick();
+		static void tab_crash();
+		static void tab_sync();
+		static void tab_misc();
+		static void tab_network();
+		static void tab_settings();
 	};
 }

@@ -90,14 +90,14 @@ namespace big
 	{
 		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImGui::ColorConvertU32ToFloat4((ImU32)3357612055));
 
-		view::root();
+		view_main::root();
 
 		ImGui::PopStyleColor();
 	}
 
 	void gui::always_draw()
 	{
-		view::always();
+		view_main::always();
 	}
 
 	void gui::script_init()
