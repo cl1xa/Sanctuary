@@ -56,6 +56,8 @@
 
 #include "services/notification_service.hpp"
 
+#include "xorstr.hpp"
+
 using namespace std;
 
 namespace big
