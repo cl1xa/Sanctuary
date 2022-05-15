@@ -26,7 +26,7 @@ namespace big
 			if (g_config.settings.notify_debug)
 				LOG(G3LOG_DEBUG) << "NETWORK_HAS_RECEIVED_HOST_BROADCAST_DATA TRIGGERED!!!";
 
-			if (g_config.settings.optimize_loading)
+			if (g_config.protection.misc.optimize_loading)
 				src->set_return_value<BOOL>(TRUE);
 		}
 	}

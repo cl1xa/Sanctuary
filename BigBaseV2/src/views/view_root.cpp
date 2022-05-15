@@ -11,7 +11,7 @@ namespace big
 		ImGui::SetNextWindowSize(ImVec2{ 750, 400 }, ImGuiCond_Once);
 		ImGui::SetNextWindowPos(ImVec2{ 100, 200 }, ImGuiCond_Once);
 
-		tabs = tabs = { "Network Events", "Script Events", "Object Sync", "Crash", "Misc", "Session", "Settings" };
+		tabs = tabs = { "Kick", "Sync", "Crash", "Misc", "Session", "Settings"};
 
 		if (ImGui::Begin("Sanctuary", &g_gui.m_opened, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize))
 		{
@@ -30,32 +30,39 @@ namespace big
 				//TODO: Do this properly lol, for now its just here as filler
 				switch (selected_tab)
 				{
-				case 0:
-					ImGui::Text("1");
+				case 0: //Kick
+					ImGui::Checkbox("Script events", &g_config.protection.kick.script_events);
+					ImGui::Checkbox("Game events", &g_config.protection.kick.game_events);
+					//Action events
+					//Control events
 					break;
-				case 1:
-					ImGui::Text("2");
+
+				case 1: //Sync
+					ImGui::Text("Not implemented yet");
 					break;
-				case 2:
-					ImGui::Text("3");
+
+				case 2: //Crash
+					ImGui::Checkbox("NET_ARRAY_HANDLER", &g_config.protection.crash.net_array_handler);
+					ImGui::Checkbox("SCRIPT_WORLD_STATE", &g_config.protection.crash.script_world_state);
+					ImGui::Checkbox("TASK_VEHICLE_TEMP_ACTION", &g_config.protection.crash.task_vehicle_temp_action);
 					break;
-				case 3:
-					ImGui::Text("4");
+
+				case 3: //Misc
+					ImGui::Checkbox("Modder detection", &g_config.protection.misc.modder_detection);
+					ImGui::Checkbox("Optimize session loading", &g_config.protection.misc.optimize_loading);
+					ImGui::Checkbox("Event protocol cleanup", &g_config.protection.misc.event_protocol_cleanup);
 					break;
-				case 4:
-					ImGui::Text("5");
+
+				case 4: //Session
+					ImGui::Text("Not implemented yet");
 					break;
-				case 5:
-					ImGui::Text("6");
-					break;
-				case 6:
-					ImGui::Checkbox("Optimize session loading", &g_config.settings.optimize_loading);
-					ImGui::Checkbox("Notify players", &g_config.settings.notify_players);//Currently this only toggles one thing, but there is more that I can do.
+
+				case 5: //Settings
+					ImGui::Checkbox("Notify players", &g_config.settings.notify_players);
 					ImGui::Checkbox("Notify debug", &g_config.settings.notify_debug);
 
 					if (ImGui::Button("Unload"))
 						g_running = false;
-
 					break;
 				}
 			}

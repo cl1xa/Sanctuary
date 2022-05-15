@@ -17,17 +17,40 @@ namespace big
 
 		struct
 		{
-			bool notify_players = false;
-			bool notify_debug = false;
-			bool optimize_loading = false;
+			struct
+			{
+				bool script_events = false;
+				bool game_events = false;
 
-		}settings;
+			}kick;
 
-		struct
-		{
+			struct
+			{
+				bool net_array_handler = false;
+				bool script_world_state = false;
+				bool task_vehicle_temp_action = false;
+
+			}crash;
+
+			struct
+			{
+				bool modder_detection = false;
+				bool event_protocol_cleanup = false;
+				bool optimize_loading = false;
+				//bool block_reports = false;
+
+			}misc;
+
 			bool freemode_terminated = false;
 
 		}protection;
+
+		struct
+		{
+			bool notify_players = false;
+			bool notify_debug = false;
+
+		}settings;
 	};
 
 	inline config g_config;
