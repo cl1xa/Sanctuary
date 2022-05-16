@@ -44,12 +44,12 @@ namespace big
 			}
 			__except (EXCEPTION_EXECUTE_HANDLER)
 			{
-				[hash]() { LOG(WARNING) << "Exception caught while trying to call " << hash << " native."; }();
+				[hash]() { LOG(WARNING) << fmt::format(xorstr_("Exception caught while trying to call {} native"), hash); }();
 			}
 		}
 		else
 		{
-			[hash]() { LOG(WARNING) << "Failed to find " << HEX_TO_UPPER(hash) << " native's handler."; }();
+			[hash]() { LOG(WARNING) << xorstr_("Failed to find ") << HEX_TO_UPPER(hash) << xorstr_(" native's handler."); }();
 		}
 	}
 }

@@ -29,19 +29,29 @@ namespace big::scripts
 
 	inline bool wait_till_loaded(int hash)
 	{
-		if (is_loaded(hash)) return true;
+		if (is_loaded(hash)) 
+			return true;
+
 		for (int i = 0; i < 150 && !is_loaded(hash); i++)
 			script::get_current()->yield(10ms);
-		if (is_loaded(hash)) return true;
+
+		if (is_loaded(hash)) 
+			return true;
+
 		return false;
 	}
 
 	inline bool wait_till_running(int hash)
 	{
-		if (is_running(hash)) return true;
+		if (is_running(hash)) 
+			return true;
+
 		for (int i = 0; i < 150 && !is_running(hash); i++)
 			script::get_current()->yield(10ms);
-		if (is_running(hash)) return true;
+
+		if (is_running(hash)) 
+			return true;
+
 		return false;
 	}
 }

@@ -9,9 +9,9 @@ namespace big
 	{
 		if (*g_pointers->m_is_session_started)
 		{
-			if (ImGui::BeginTabBar("##network_tabbar"))
+			if (ImGui::BeginTabBar(xorstr_("##network_tabbar")))
 			{
-				if (ImGui::BeginTabItem("Session"))
+				if (ImGui::BeginTabItem(xorstr_("Session")))
 				{
 					for (const SessionType& session_type : sessions)
 					{
@@ -28,21 +28,24 @@ namespace big
 					ImGui::EndTabItem();
 				}
 
-				if (ImGui::BeginTabItem("Players"))
+				if (ImGui::BeginTabItem(xorstr_("Players")))
 				{
-					if (ImGui::BeginListBox("##plist", { 580 , 315 })) //Gross hardcoded values, but whatever.
+					if (ImGui::BeginListBox(xorstr_("##plist"), { 580 , 315 })) //Gross hardcoded values, but whatever.
 					{
 						for (auto& item : g_player_service->m_players)
 						{
 							const auto& plyr = item.second;
 							const char* who = plyr->get_name();
 
+							std::string in = who;
+							const char* out = (fmt::format(xorstr_("{}"), in)).c_str();
+
 							if (plyr->is_host())
-								ImGui::TextColored(ImVec4(1.000f, 0.879f, 0.000f, 1.000f), who);
+								ImGui::TextColored(ImVec4(1.000f, 0.879f, 0.000f, 1.000f), out);
 							else if (plyr->is_friend())
-								ImGui::TextColored(ImVec4(0.365f, 0.714f, 0.898f, 1.000f), who);
+								ImGui::TextColored(ImVec4(0.365f, 0.714f, 0.898f, 1.000f), out);
 							else
-								ImGui::Text(who);
+								ImGui::Text(out);
 						}
 
 						ImGui::EndListBox();
@@ -55,6 +58,6 @@ namespace big
 			}
 		}
 		else
-			ImGui::Text("GTA V Online is required in order to uses these features");
+			ImGui::Text(xorstr_("GTA V Online is required in order to uses these features"));
 	}
 }

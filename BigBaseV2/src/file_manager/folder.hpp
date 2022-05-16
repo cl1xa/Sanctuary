@@ -7,7 +7,6 @@ namespace big
 
 	class folder
 	{
-
 	public:
 		folder(std::filesystem::path folder_path);
 
@@ -25,6 +24,5 @@ namespace big
 		bool m_is_project_file;
 
 		std::filesystem::path m_folder_path;
-
 	};
 }

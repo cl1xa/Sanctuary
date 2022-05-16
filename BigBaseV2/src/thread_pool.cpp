@@ -18,7 +18,8 @@ namespace big
 	{
 		const std::uint32_t thread_count = std::thread::hardware_concurrency();
 
-		LOG(G3LOG_DEBUG) << "Allocating " << thread_count << " threads in thread pool.";
+		LOG(G3LOG_DEBUG) << fmt::format("Allocating {} threads in thread pool.", thread_count);
+
 		this->m_thread_pool.reserve(thread_count);
 
 		for (std::uint32_t i = 0; i < thread_count; i++)
@@ -77,10 +78,10 @@ namespace big
 			}
 			catch (const std::exception& e)
 			{
-				LOG(WARNING) << "Exception thrown while executing job in thread:" << std::endl << e.what();
+				LOG(WARNING) << xorstr_("Exception thrown while executing job in thread:") << std::endl << e.what();
 			}
 		}
 
-		LOG(G3LOG_DEBUG) << "Thread " << std::this_thread::get_id() << " exiting...";
+		LOG(G3LOG_DEBUG) << xorstr_("Thread ") << std::this_thread::get_id() << xorstr_(" exiting...");
 	}
 }

@@ -44,6 +44,7 @@ namespace memory
 	{
 		auto data = sig.m_bytes.data();
 		auto length = sig.m_bytes.size();
+
 		for (std::uintptr_t i = 0; i < m_size - length; ++i)
 		{
 			if (pattern_matches(m_base.add(i).as<std::uint8_t*>(), data, length))
@@ -64,9 +65,7 @@ namespace memory
 		for (std::uintptr_t i = 0; i < m_size - length; ++i)
 		{
 			if (pattern_matches(m_base.add(i).as<std::uint8_t*>(), data, length))
-			{
 				result.push_back(m_base.add(i));
-			}
 		}
 
 		return std::move(result);

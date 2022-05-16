@@ -11,9 +11,9 @@ namespace big
 		ImGui::SetNextWindowSize(ImVec2{ 750, 400 }, ImGuiCond_Once);
 		ImGui::SetNextWindowPos(ImVec2{ 100, 200 }, ImGuiCond_Once);
 
-		tabs = tabs = { "Kick", "Crash", "Sync", "Misc", "Network", "Settings" };
+		tabs = tabs = { xorstr_("Kick"), xorstr_("Crash"), xorstr_("Sync"), xorstr_("Misc"), xorstr_("Network"), xorstr_("Settings") };
 
-		if (ImGui::Begin("Sanctuary", &g_gui.m_opened, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize))
+		if (ImGui::Begin(xorstr_("Sanctuary"), &g_gui.m_opened, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize))
 		{
 			ImGui::Columns(2);
 			{
@@ -49,6 +49,7 @@ namespace big
 					break;
 				}
 			}
+
 			ImGui::End();
 		}
 	}

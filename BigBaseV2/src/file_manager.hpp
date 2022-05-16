@@ -2,6 +2,7 @@
 #include "common.hpp"
 #include "file_manager/file.hpp"
 #include "file_manager/folder.hpp"
+#include "xorstr.hpp"
 
 namespace big
 {
@@ -32,14 +33,14 @@ namespace big
 		file get_project_file(std::filesystem::path file_path)
 		{
 			if (file_path.is_absolute())
-				throw std::exception("Project files are relative to the BaseDir, don't use absolute paths!");
+				throw std::exception(xorstr_("Project files are relative to the BaseDir, don't use absolute paths!"));
 
 			return file(this, file_path);
 		}
 		folder get_project_folder(std::filesystem::path folder_path)
 		{
 			if (folder_path.is_absolute())
-				throw std::exception("Project folders are relative to the BaseDir, don't use absolute paths!");
+				throw std::exception(xorstr_("Project folders are relative to the BaseDir, don't use absolute paths!"));
 
 			return folder(this, folder_path);
 		}
@@ -59,6 +60,7 @@ namespace big
 				std::filesystem::remove(folder_path);
 				create_path = true;
 			}
+
 			if (create_path)
 				std::filesystem::create_directory(folder_path);
 

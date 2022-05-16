@@ -58,7 +58,7 @@ namespace big
 			if (program->is_valid())
 			{
 				hook_instance(program);
-				LOG(INFO) << "Hooked " << program->m_name << " script (" << HEX_TO_UPPER(static_cast<void*>(program)) << ")";
+				LOG(INFO) << xorstr_("Hooked ") << program->m_name << xorstr_(" script (") << HEX_TO_UPPER(static_cast<void*>(program)) << xorstr_(")");
 			}
 		}
 	}

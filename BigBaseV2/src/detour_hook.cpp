@@ -15,11 +15,11 @@ namespace big
 
 		if (auto status = MH_CreateHook(m_target, m_detour, &m_original); status == MH_OK)
 		{
-			LOG(INFO) << "Created hook '" << m_name << "'.";
+			LOG(INFO) << fmt::format(xorstr_("Created hook '{}'"), m_name);
 		}
 		else
 		{
-			throw std::runtime_error(fmt::format("Failed to create hook '{}' at 0x{:X} (error: {})", m_name, reinterpret_cast<std::uintptr_t>(m_target), MH_StatusToString(status)));
+			throw std::runtime_error(fmt::format(xorstr_("Failed to create hook '{}' at 0x{:X} (error: {})"), m_name, reinterpret_cast<std::uintptr_t>(m_target), MH_StatusToString(status)));
 		}
 	}
 
@@ -30,18 +30,18 @@ namespace big
 			MH_RemoveHook(m_target);
 		}
 
-		LOG(INFO) << "Removed hook '" << m_name << "'.";
+		LOG(INFO) << fmt::format(xorstr_("Removed hook '{}'"), m_name);
 	}
 
 	void detour_hook::enable()
 	{
 		if (auto status = MH_EnableHook(m_target); status == MH_OK)
 		{
-			LOG(INFO) << "Enabled hook '" << m_name << "'.";
+			LOG(INFO) << fmt::format(xorstr_("Enabled hook '{}'"), m_name);
 		}
 		else
 		{
-			throw std::runtime_error(fmt::format("Failed to enable hook 0x{:X} ({})", reinterpret_cast<std::uintptr_t>(m_target), MH_StatusToString(status)));
+			throw std::runtime_error(fmt::format(xorstr_("Failed to enable hook 0x{:X} ({})"), reinterpret_cast<std::uintptr_t>(m_target), MH_StatusToString(status)));
 		}
 	}
 
@@ -49,11 +49,11 @@ namespace big
 	{
 		if (auto status = MH_DisableHook(m_target); status == MH_OK)
 		{
-			LOG(INFO) << "Disabled hook '" << m_name << "'.";
+			LOG(INFO) << fmt::format(xorstr_("Disabled hook '{}'"), m_name);
 		}
 		else
 		{
-			LOG(WARNING) << "Failed to disable hook '" << m_name << "'.";
+			LOG(INFO) << fmt::format(xorstr_("Failed to disable hook '{}'"), m_name);
 		}
 	}
 
@@ -80,7 +80,7 @@ namespace big
 		{
 			[this]()
 			{
-				throw std::runtime_error(fmt::format("Failed to fix hook address for '{}'", m_name));
+				throw std::runtime_error(fmt::format(xorstr_("Failed to fix hook address for '{}'"), m_name));
 			}();
 		}
 	}

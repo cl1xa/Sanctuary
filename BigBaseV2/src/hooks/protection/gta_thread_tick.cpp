@@ -24,7 +24,7 @@ namespace big
 		{
 			if (result == rage::eThreadState::killed && state == rage::eThreadState::running && !g_config.protection.freemode_terminated)
 			{
-				LOG(WARNING) << "Freemode script crashed, attempting recovery...";
+				LOG(WARNING) << xorstr_("Freemode script crashed, attempting recovery...");
 
 				result = rage::eThreadState::running;
 

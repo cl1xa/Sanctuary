@@ -4,6 +4,6 @@ namespace big
 {
 	void view_sub::tab_sync()
 	{
-		ImGui::Text("Not implemented yet");
+		ImGui::Text(xorstr_("Not implemented yet"));
 	}
 }

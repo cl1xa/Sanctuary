@@ -92,7 +92,7 @@ namespace big
 			// When freemode script loads, remove the loading screen
 			if (state == eTransitionState::TRANSITION_STATE_WAIT_JOIN_FM_SESSION && DLC::GET_IS_LOADING_SCREEN_ACTIVE())
 			{
-				LOG(INFO) << fmt::format("Loading Online... [{}]", transition_states[(int)state]);
+				LOG(INFO) << fmt::format(xorstr_("Loading Online... [{}]"), transition_states[(int)state]);
 				SCRIPT::SHUTDOWN_LOADING_SCREEN();
 			}
 
@@ -107,7 +107,7 @@ namespace big
 				return;
 
 			HUD::BEGIN_TEXT_COMMAND_BUSYSPINNER_ON("STRING");
-			HUD::ADD_TEXT_COMPONENT_SUBSTRING_PLAYER_NAME(fmt::format("Loading... [{}]", transition_states[(int)state]).c_str());
+			HUD::ADD_TEXT_COMPONENT_SUBSTRING_PLAYER_NAME(fmt::format(xorstr_("Loading... [{}]"), transition_states[(int)state]).c_str());
 			HUD::END_TEXT_COMMAND_BUSYSPINNER_ON(5);
 
 			last_state = state;

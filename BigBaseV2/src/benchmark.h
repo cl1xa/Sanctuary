@@ -16,7 +16,8 @@ namespace big
 			auto now = high_resolution_clock::now();
 			auto milliseconds_elapsed = duration_cast<milliseconds>(now - m_start);
 			auto microseconds_elapsed = duration_cast<microseconds>(now - m_start);
-			LOG(INFO) << m_name << " finished with a resulting time of: " << milliseconds_elapsed.count() << "ms " << microseconds_elapsed.count() % 1000 << "us";
+
+			LOG(G3LOG_DEBUG) << m_name << xorstr_(" finished with a resulting time of: ") << milliseconds_elapsed.count() << xorstr_("ms ") << microseconds_elapsed.count() % 1000 << xorstr_("us");
 		}
 
 		void reset()

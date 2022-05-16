@@ -19,7 +19,7 @@ namespace big::system
 		{
 			auto address = g_pointers->m_get_native_handler(g_pointers->m_native_registration_table, map.second);
 
-			file << std::hex << std::uppercase << "0x" << map.first << " : GTA5.exe + 0x" << (DWORD64)address - base_address << std::endl;
+			file << std::hex << std::uppercase << xorstr_("0x") << map.first << xorstr_(" : GTA5.exe + 0x") << (DWORD64)address - base_address << std::endl;
 		}
 
 		file.close();

@@ -47,7 +47,7 @@ namespace big
 		}
 		catch (const std::exception&)
 		{
-			LOG(WARNING) << "Failure to parse globals.json, aborting...";
+			LOG(WARNING) << xorstr_("Failure to parse globals.json, aborting...");
 
 			return false;
 		}
@@ -80,7 +80,7 @@ namespace big
 		}
 		catch (const std::exception&)
 		{
-			LOG(WARNING) << "Failed to write to globals.json";
+			LOG(WARNING) << xorstr_("Failed to write to globals.json");
 		}
 	}
 }

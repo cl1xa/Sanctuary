@@ -10,12 +10,15 @@ namespace big
 		const auto hash = static_cast<eRemoteEvent>(args[0]);
 		const auto player_name = player->get_name();
 
+		if (g_config.settings.notify_debug)
+			fmt::format(xorstr_("Player: {} sent script event: {}"), player->get_name(), int(hash));
+
 		//TODO: add script event protection
 
 		/*
 			LOG(INFO) << "== Begin of Script Event ==";
 			LOG(INFO) << "Player: " << player->get_name();
-			LOG(INFO) << "Hash/Arg #0: " << (int)hash;
+			
 
 			for (std::size_t i = 1; i < sizeof(args); i++)
 				LOG(INFO) << "Arg #" << i << ": " << args[i];

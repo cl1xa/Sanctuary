@@ -75,27 +75,23 @@ namespace big
 				if (m_script_hooks.find(gta_thread->m_script_hash) != m_script_hooks.end())
 				{
 					// this should never happen but if it does we catch it
-					LOG(INFO) << "Dynamic native script hook still active for script, cleaning up...";
+					LOG(INFO) << xorstr_("Dynamic native script hook still active for script, cleaning up...");
 
 					m_script_hooks.erase(gta_thread->m_script_hash);
 				}
 
-				m_script_hooks.emplace(
-					gta_thread->m_script_hash,
-					std::make_unique<script_hook>(gta_thread->m_script_hash, native_replacements)
-				);
+				m_script_hooks.emplace(gta_thread->m_script_hash, std::make_unique<script_hook>(gta_thread->m_script_hash, native_replacements));
 
 				return true;
 			}
+
 			return false;
 		}
 
 		void do_cleanup_for_thread(const GtaThread* gta_thread)
 		{
 			if (m_script_hooks.erase(gta_thread->m_script_hash))
-			{
-				LOG(INFO) << gta_thread->m_name << " script terminated, cleaning up native hooks";
-			}
+				LOG(INFO) << fmt::format(xorstr_("{} script terminated, cleaning up native hooks"), gta_thread->m_name);
 		}
 
 	};

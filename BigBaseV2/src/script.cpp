@@ -15,7 +15,7 @@ namespace big
 			offset = ((DWORD64)exp->ExceptionRecord->ExceptionAddress - (DWORD64)mod);
 			GetModuleFileNameA(mod, buffer, MAX_PATH - 1);
 		}
-		LOG(FATAL) << "Exception Code: " << HEX_TO_UPPER(exp->ExceptionRecord->ExceptionCode) << " Exception Offset: " << HEX_TO_UPPER(offset) << " Fault Module Name: " << buffer;
+		LOG(FATAL) << xorstr_("Exception Code: ") << HEX_TO_UPPER(exp->ExceptionRecord->ExceptionCode) << xorstr_(" Exception Offset: ") << HEX_TO_UPPER(offset) << xorstr_(" Fault Module Name: ") << buffer;
 	}
 
 	script::script(func_t func, std::optional<std::size_t> stack_size) :
@@ -73,7 +73,7 @@ namespace big
 			EXCEPT_CLAUSE
 
 			[]() {
-			LOG(INFO) << "Script finished!";
+			LOG(INFO) << xorstr_("Script finished!");
 		}();
 
 		while (true)

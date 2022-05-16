@@ -8,9 +8,9 @@ namespace big
 		{
 			if (a2 == 0 && (a3 == 103 || a3 == 0))
 			{
-				LOG(WARNING) << "Corrected unwanted data in SCRIPT_WORLD_STATE_EVENT";
+				LOG(WARNING) << xorstr_("Corrected unwanted data in SCRIPT_WORLD_STATE_EVENT");
 
-				g_notification_service->push_warning("Protections", "Corrected unwanted data in SCRIPT_WORLD_STATE_EVENT");
+				g_notification_service->push_warning(xorstr_("Protections"), xorstr_("Corrected unwanted data in SCRIPT_WORLD_STATE_EVENT"));
 
 				return;
 			}

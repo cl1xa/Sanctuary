@@ -20,25 +20,24 @@ namespace memory
 				if (entry.m_callback)
 				{
 					std::invoke(std::move(entry.m_callback), result);
-					LOG(INFO) << "Found '" << entry.m_name << "' GTA5.exe+" << HEX_TO_UPPER(result.as<DWORD64>() - region.begin().as<DWORD64>());
+					LOG(INFO) << xorstr_("Found '") << entry.m_name << xorstr_("' GTA5.exe+") << HEX_TO_UPPER(result.as<DWORD64>() - region.begin().as<DWORD64>());
 				}
 				else
 				{
 					all_found = false;
-					LOG(WARNING) << "Failed to find '" << entry.m_name << "'.";
+					LOG(WARNING) << xorstr_("Failed to find '") << entry.m_name << xorstr_("'.");
 				}
 			}
 			else
 			{
 				all_found = false;
-				LOG(WARNING) << "Failed to find '" << entry.m_name << "'.";
+				LOG(WARNING) << xorstr_("Failed to find '") << entry.m_name << xorstr_("'.");
 			}
 		}
 
 		m_entries.clear();
+
 		if (!all_found)
-		{
-			throw std::runtime_error("Failed to find some patterns.");
-		}
+			throw std::runtime_error(xorstr_("Failed to find some patterns."));
 	}
 }
