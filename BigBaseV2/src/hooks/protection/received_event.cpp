@@ -66,8 +66,8 @@ namespace big
 
 		case RockstarEvent::SCRIPTED_GAME_EVENT:
 		{
-			if (g_config.protection.kick.script_events)
-			{
+			//if (g_config.protection.kick.script_events)
+			//{
 				const auto scripted_game_event = std::make_unique<CScriptedGameEvent>();
 
 				buffer->ReadDword(&scripted_game_event->m_args_size, 32);
@@ -75,15 +75,20 @@ namespace big
 				if (scripted_game_event->m_args_size - 1 <= 0x1AF)
 					buffer->ReadArray(&scripted_game_event->m_args, 8 * scripted_game_event->m_args_size);
 
+				const auto args = scripted_game_event->m_args;
+				const auto hash = static_cast<eRemoteEvent>(args[0]);
+
+				if (g_config.settings.notify_debug)
+					fmt::format(xorstr_("Player: {} sent script event: {}"), source_player->get_name(), int(hash));
+
 				if (hooks::scripted_game_event(scripted_game_event.get(), source_player))
 				{
 					g_pointers->m_send_event_ack(event_manager, source_player, target_player, event_index, event_handled_bitset);
-
 					return;
 				}
 
 				buffer->Seek(0);
-			}
+			//}
 			
 			break;
 		}
