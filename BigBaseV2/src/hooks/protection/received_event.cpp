@@ -66,8 +66,8 @@ namespace big
 
 		case RockstarEvent::SCRIPTED_GAME_EVENT:
 		{
-			//if (g_config.protection.kick.script_events)
-			//{
+			if (g_config.protection.kick.script_events)
+			{
 				const auto scripted_game_event = std::make_unique<CScriptedGameEvent>();
 
 				buffer->ReadDword(&scripted_game_event->m_args_size, 32);
@@ -88,7 +88,7 @@ namespace big
 				}
 
 				buffer->Seek(0);
-			//}
+			}
 			
 			break;
 		}
