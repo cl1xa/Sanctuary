@@ -214,6 +214,11 @@ namespace big
 			m_network_group_override = ptr.as<PVOID>();
 		});
 		
+		main_batch.add("Chat Receive", "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC 30 49 8B F0 4D 8B C1", [this](memory::handle ptr)
+		{
+			m_chat_receive = ptr.as<PVOID>();
+		});
+
 		main_batch.run(memory::module(nullptr));
 
 		m_hwnd = FindWindowW(L"grcWindow", nullptr);

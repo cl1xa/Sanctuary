@@ -2,7 +2,7 @@
 
 #include "imgui.h"
 
-namespace big
+namespace big::find
 {
     #define FIND(value, list) find(value, sizeof(list) / sizeof(list[0]), list)
     #define IS(value, list) FIND(value, list)
@@ -20,7 +20,7 @@ namespace big
         return false;
     }
 
-    inline int getIndex(std::vector<char> v, char K)
+    inline int get_index(std::vector<char> v, char K)
     {
         auto it = find(v.begin(), v.end(), K);
         if (it != v.end())
@@ -30,5 +30,10 @@ namespace big
         }
         else
             return -1;
+    }
+
+    bool in_array(const std::string& value, const std::vector<std::string>& array)
+    {
+        return std::find(array.begin(), array.end(), value) != array.end();
     }
 }

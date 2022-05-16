@@ -34,6 +34,7 @@ namespace big
 
 			struct
 			{
+				bool chat_spam = false;
 				bool terminate_loading_screens = false;
 				bool rate_limit = false;
 				bool modder_detection = false;

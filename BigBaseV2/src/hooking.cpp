@@ -44,7 +44,9 @@ namespace big
 
 		m_player_has_joined_hook("Player Has Joined", g_pointers->m_player_has_joined, &hooks::player_join),
 		
-		m_player_has_left_hook("Player Has Left", g_pointers->m_player_has_left, &hooks::player_leave)
+		m_player_has_left_hook("Player Has Left", g_pointers->m_player_has_left, &hooks::player_leave),
+
+		m_chat_receive_hook("Chat Receive", g_pointers->m_chat_receive, &hooks::chat_receive)
 	{
 		m_swapchain_hook.hook(hooks::swapchain_present_index, &hooks::swapchain_present);
 		m_swapchain_hook.hook(hooks::swapchain_resizebuffers_index, &hooks::swapchain_resizebuffers);
@@ -86,6 +88,8 @@ namespace big
 
 		m_send_net_info_to_lobby.enable();
 
+		m_chat_receive_hook.enable();
+
 		m_enabled = true;
 
 		//g_gui.m_opened = true;
@@ -94,6 +98,8 @@ namespace big
 	void hooking::disable()
 	{
 		m_enabled = false;
+
+		m_chat_receive_hook.disable();
 
 		m_send_net_info_to_lobby.disable();
 

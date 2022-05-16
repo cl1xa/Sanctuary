@@ -80,6 +80,8 @@ namespace big
 		// Received Event Signatures END
 
 		PVOID m_send_net_info_to_lobby{};
+
+		PVOID m_chat_receive{};
 	};
 
 	inline pointers *g_pointers{};
