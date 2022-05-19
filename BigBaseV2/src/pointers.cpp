@@ -88,11 +88,6 @@ namespace big
 			m_gta_thread_start = ptr.as<PVOID>();
 		});
 
-		main_batch.add("Thread Thick", "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC 20 80 B9 ? ? ? ? ? 8B FA 48 8B D9 74 05", [this](memory::handle ptr)
-		{
-			m_gta_thread_tick = ptr.as<PVOID>();
-		});
-
 		main_batch.add("Thread Kill", "48 89 5C 24 ? 57 48 83 EC 20 48 83 B9 ? ? ? ? ? 48 8B D9 74 14", [this](memory::handle ptr)
 		{
 			m_gta_thread_kill = ptr.as<PVOID>();
@@ -134,14 +129,7 @@ namespace big
 
 		main_batch.add("Request Control of Entity PATCH", "48 89 5C 24 ? 57 48 83 EC 20 8B D9 E8 ? ? ? ? ? ? ? ? 8B CB", [this](memory::handle ptr)
 		{
-			PVOID spectator_check = ptr.add(0x11).as<PVOID>();
-
-			memset(spectator_check, 0x90, 0x4);
-		});
-
-		main_batch.add("GET CNetGamePlayer", "48 83 EC ? 33 C0 38 05 ? ? ? ? 74 ? 83 F9", [this](memory::handle ptr)
-		{
-			m_get_net_game_player = ptr.as<decltype(m_get_net_game_player)>();
+			m_spectator_check = ptr.add(0x13).as<PUSHORT>();
 		});
 
 		main_batch.add("Replay Interface", "48 8D 0D ? ? ? ? 48 8B D7 E8 ? ? ? ? 48 8D 0D ? ? ? ? 8A D8 E8 ? ? ? ? 84 DB 75 13 48 8D 0D", [this](memory::handle ptr)
@@ -219,17 +207,52 @@ namespace big
 			m_chat_receive = ptr.as<PVOID>();
 		});
 
-		main_batch.run(memory::module(nullptr));
+		auto mem_region = memory::module(nullptr);
+		main_batch.run(mem_region);
+
+		#pragma region Freemode thread restorer through VM patch
+		//https://github.com/Yimura/YimMenu/blob/524a961e435618652c3594e6a819f1dd5d405467/BigBaseV2/src/pointers.cpp#L242
+		if (auto pat1 = mem_region.scan("3b 0a 0f 83 ? ? ? ? 48 ff c7"))
+		{
+			*pat1.add(2).as<uint32_t*>() = 0xc9310272;
+			*pat1.add(6).as<uint16_t*>() = 0x9090;
+		}
+
+		if (auto pat2 = mem_region.scan("3b 0a 0f 83 ? ? ? ? 49 03 fa"))
+		{
+			*pat2.add(2).as<uint32_t*>() = 0xc9310272;
+			*pat2.add(6).as<uint16_t*>() = 0x9090;
+		}
+
+		auto pat3 = mem_region.scan_all("3b 11 0f 83 ? ? ? ? 48 ff c7");
+		for (auto& handle : pat3)
+		{
+			*handle.add(2).as<uint32_t*>() = 0xd2310272;
+			*handle.add(6).as<uint16_t*>() = 0x9090;
+		}
+
+		auto pat4 = mem_region.scan_all("3b 11 0f 83 ? ? ? ? 49 03 fa");
+		for (auto& handle : pat4)
+		{
+			*handle.add(2).as<uint32_t*>() = 0xd2310272;
+			*handle.add(6).as<uint16_t*>() = 0x9090;
+		}
+		#pragma endregion
 
 		m_hwnd = FindWindowW(L"grcWindow", nullptr);
+
 		if (!m_hwnd)
 			throw std::runtime_error("Failed to find the game's window.");
+
+		*m_spectator_check = 0x9090;
 
 		g_pointers = this;
 	}
 
 	pointers::~pointers()
 	{
+		*m_spectator_check = 0x6A75;
+
 		g_pointers = nullptr;
 	}
 }

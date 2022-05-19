@@ -37,15 +37,12 @@ namespace big
 							const auto& plyr = item.second;
 							const char* who = plyr->get_name();
 
-							std::string in = who;
-							const char* out = (fmt::format(xorstr_("{}"), in)).c_str();
-
 							if (plyr->is_host())
-								ImGui::TextColored(ImVec4(1.000f, 0.879f, 0.000f, 1.000f), out);
+								ImGui::TextColored(ImVec4(1.000f, 0.879f, 0.000f, 1.000f), who);
 							else if (plyr->is_friend())
-								ImGui::TextColored(ImVec4(0.365f, 0.714f, 0.898f, 1.000f), out);
+								ImGui::TextColored(ImVec4(0.365f, 0.714f, 0.898f, 1.000f), who);
 							else
-								ImGui::Text(out);
+								ImGui::Text(who);
 						}
 
 						ImGui::EndListBox();

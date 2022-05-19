@@ -11,8 +11,6 @@ namespace big::functions
 	using get_native_handler_t = rage::scrNativeHandler(*)(rage::scrNativeRegistrationTable*, rage::scrNativeHash);
 	using fix_vectors_t = void(*)(rage::scrNativeCallContext*);
 
-	using get_net_game_player = CNetGamePlayer*(Player player);
-
 	using trigger_script_event = void(int event_group, int64_t* args, int arg_count, int player_bits);
 
 	using increment_stat_event = bool(uint64_t net_event_struct, int64_t sender, int64_t a3);

@@ -7,10 +7,11 @@ namespace big
 	{
 		g_player_service->do_cleanup();
 
-		LOG(G3LOG_DEBUG) << xorstr_("CNetworkPlayerMgr#shutdown got called, we're probably leaving our session.");
+		string msg = xorstr_("Leaving session and cleaning up player data.");
 
+		LOG(G3LOG_DEBUG) << msg;
 		if (g_config.settings.notify_debug)
-			g_notification_service->push(xorstr_("Network Player Manager"), xorstr_("Leaving session and cleaning up player data."));
+			g_notification_service->push_warning(xorstr_("Network Player Manager"), msg);
 
 		return g_hooking->m_network_player_mgr_shutdown_hook.get_original<decltype(&hooks::network_player_mgr_shutdown)>()(_this);
 	}

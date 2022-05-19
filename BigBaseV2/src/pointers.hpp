@@ -54,10 +54,7 @@ namespace big
 
 		functions::get_screen_coords_for_world_coords* m_get_screen_coords_for_world_coords{};
 
-		functions::get_net_game_player* m_get_net_game_player{};
-
 		PVOID m_gta_thread_start{};
-		PVOID m_gta_thread_tick{};
 		PVOID m_gta_thread_kill{};
 
 		PVOID m_network_player_mgr_shutdown;
@@ -82,6 +79,8 @@ namespace big
 		PVOID m_send_net_info_to_lobby{};
 
 		PVOID m_chat_receive{};
+
+		PUSHORT m_spectator_check;
 	};
 
 	inline pointers *g_pointers{};

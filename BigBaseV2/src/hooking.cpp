@@ -25,12 +25,11 @@ namespace big
 		m_convert_thread_to_fiber_hook("ConvertThreadToFiber", memory::module("kernel32.dll").get_export("ConvertThreadToFiber").as<void*>(), &hooks::convert_thread_to_fiber),
 
 		m_gta_thread_start_hook("GTA Thead Start", g_pointers->m_gta_thread_start, &hooks::gta_thread_start),
-		m_gta_thread_tick_hook("GTA Thread Tick", g_pointers->m_gta_thread_tick, &hooks::gta_thread_tick),
 		m_gta_thread_kill_hook("GTA Thread Kill", g_pointers->m_gta_thread_kill, &hooks::gta_thread_kill),
 
 		m_network_player_mgr_shutdown_hook("Network Player Mgr Shutdown", g_pointers->m_network_player_mgr_shutdown, &hooks::network_player_mgr_shutdown),
 
-		m_network_group_override("Network Group Override", g_pointers->m_network_group_override, &hooks::network_group_override),
+		m_network_group_override_hook("Network Group Override", g_pointers->m_network_group_override, &hooks::network_group_override),
 
 		m_net_array_handler_hook("Net Array Handler", g_pointers->m_net_array_handler, &hooks::net_array_handler),
 
@@ -73,9 +72,9 @@ namespace big
 
 		m_gta_thread_start_hook.enable();
 		m_gta_thread_kill_hook.enable();
-		m_gta_thread_tick_hook.enable();
 
 		m_network_player_mgr_shutdown_hook.enable();
+		m_network_group_override_hook.enable();
 
 		m_net_array_handler_hook.enable();
 
@@ -83,6 +82,8 @@ namespace big
 		m_player_has_left_hook.enable();
 
 		m_increment_stat_hook.enable();
+
+		m_is_dlc_present_hook.enable();
 
 		m_received_event_hook.enable();
 
@@ -105,6 +106,8 @@ namespace big
 
 		m_received_event_hook.disable();
 
+		m_is_dlc_present_hook.disable();
+
 		m_increment_stat_hook.disable();
 
 		m_player_has_joined_hook.disable();
@@ -112,9 +115,9 @@ namespace big
 
 		m_net_array_handler_hook.disable();
 
+		m_network_group_override_hook.disable();
 		m_network_player_mgr_shutdown_hook.disable();
 
-		m_gta_thread_tick_hook.disable();
 		m_gta_thread_kill_hook.disable();
 		m_gta_thread_start_hook.disable();
 

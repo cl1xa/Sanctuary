@@ -34,15 +34,16 @@ namespace big
 		const auto player_name = player->get_name();
 		const char* event_name = scripted_game_event->get_name();
 
-		if ((int64_t)eRemoteEvent::RotateCam)
+		if ((int64_t)eRemoteEvent::RotateCam) //Rule this one out due its constant false positives
 		{
 			if (CNetworkPlayerMgr* player_mgr = gta_util::get_network_player_mgr(); player_mgr != nullptr)
 			{
 				if (args[2] == player_mgr->m_local_net_player->m_player_id)
 				{
-					LOG(WARNING) << fmt::format(xorstr_("{} attempted to modify your camera"), player_name);
+					string msg = fmt::format(xorstr_("{} attempted to modify your camera"), player_name);
 
-					g_notification_service->push_warning(xorstr_("Protections"), fmt::format(xorstr_("{} attempted to modify your camera"), player_name));
+					LOG(WARNING) << msg;
+					g_notification_service->push_warning(xorstr_("Protections"), msg);
 				}
 			}
 
@@ -53,10 +54,9 @@ namespace big
 		{
 			if (blocked_script_events[a] == (int64_t)hash)
 			{
-				LOG(WARNING) << fmt::format(xorstr_("{} sent unwanted script event: {} | {}"), player_name, event_name, hash);
+				string msg = fmt::format(xorstr_("{} sent unwanted script event: {} | {}"), player_name, event_name, hash);
 
-				g_notification_service->push_warning(xorstr_("Protections"), fmt::format(xorstr_("{} sent unwanted script event: "), player_name, event_name, hash));
-
+				g_notification_service->push_warning(xorstr_("Protections"), msg);
 				return true;
 			}
 		}

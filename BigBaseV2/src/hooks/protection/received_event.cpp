@@ -4,24 +4,47 @@
 
 namespace big
 {
-	void hooks::received_event(rage::netEventMgr* event_manager,CNetGamePlayer* source_player,CNetGamePlayer* target_player,uint16_t event_id,int event_index,int event_handled_bitset,int unk,rage::datBitBuffer* buffer)
+	void hooks::received_event(rage::netEventMgr* event_manager, CNetGamePlayer* source_player, CNetGamePlayer* target_player, uint16_t event_id, int event_index, int event_handled_bitset, int unk, rage::datBitBuffer* buffer)
 	{
 		const char* sender_name = source_player->get_name();
 
-		//TODO: Look more into this
+		//This looks like garbage but it works... I will clean this up in the future.
 		if (g_config.protection.misc.event_protocol_cleanup)
 		{
 			const auto event_name = *(char**)((DWORD64)event_manager + 8i64 * event_id + 243376);
 
-			if (event_name == nullptr || source_player == nullptr || event_id > 91u || source_player->m_player_id < 0 || source_player->m_player_id >= 32)
+			//This shouldn't ever happen, but if it does we can catch it.
+			if (event_manager == nullptr || event_name == nullptr || source_player == nullptr || target_player == nullptr || buffer == nullptr)
 			{
-				LOG(WARNING) << fmt::format(xorstr_("Protocol cleanup purged: {} from: {}"), event_name, sender_name);
+				string msg = fmt::format(xorstr_("Malformed protocol information from: {} | {}"), sender_name, event_name);
 
+				LOG(WARNING) << msg;
 				if (g_config.settings.notify_debug)
-					g_notification_service->push_warning(xorstr_("Protocol"), fmt::format(xorstr_("Rerouted: {} from: {}"), event_name, sender_name));
+					g_notification_service->push_warning(xorstr_("Event Protocol"), msg);
 
 				g_pointers->m_send_event_ack(event_manager, source_player, target_player, event_index, event_handled_bitset);
 				return;
+			}
+
+			if (event_id > 91u || source_player->m_player_id < 0 || source_player->m_player_id >= 32)
+			{
+				switch ((RockstarEvent)event_id)
+				{
+				case RockstarEvent::REMOTE_SCRIPT_INFO_EVENT:
+				case RockstarEvent::REMOTE_SCRIPT_LEAVE_EVENT:
+				case RockstarEvent::NETWORK_CHECK_EXE_SIZE_EVENT:
+					break;
+
+				default:
+					string msg = fmt::format(xorstr_("Purged unwanted protocol event: {} from: {}"), event_name, sender_name);
+
+					LOG(WARNING) << msg;
+					if (g_config.settings.notify_debug)
+						g_notification_service->push_warning(xorstr_("Event Protocol"), msg);
+
+					g_pointers->m_send_event_ack(event_manager, source_player, target_player, event_index, event_handled_bitset);
+					return;
+				}
 			}
 		}
 
@@ -48,19 +71,19 @@ namespace big
 
 					if (action >= 16 && action <= 18)
 					{
+						string msg = fmt::format(xorstr_("{} attempted to send TASK_VEHICLE_TEMP_ACTION crash."), sender_name);
+
+						LOG(WARNING) << msg;
+						g_notification_service->push_warning(xorstr_("Protection"), msg);
+
 						g_pointers->m_send_event_ack(event_manager, source_player, target_player, event_index, event_handled_bitset);
-
-						LOG(WARNING) << fmt::format(xorstr_("{} attempted to send TASK_VEHICLE_TEMP_ACTION crash."), sender_name);
-
-						g_notification_service->push_warning(xorstr_("Protection"), fmt::format(xorstr_("{} sent TASK_VEHICLE_TEMP_ACTION crash."), sender_name));
-
 						return;
 					}
 
 					buffer->Seek(0);
 				}
 			}
-			
+
 			break;
 		}
 
@@ -89,7 +112,7 @@ namespace big
 
 				buffer->Seek(0);
 			}
-			
+
 			break;
 		}
 
@@ -100,7 +123,7 @@ namespace big
 		{
 			switch ((RockstarEvent)event_id)
 			{ //Begin switch case
-			
+
 			case RockstarEvent::REPORT_CASH_SPAWN_EVENT:
 			{
 				uint32_t money;
@@ -111,9 +134,10 @@ namespace big
 
 				if (money >= 2000)
 				{
-					LOG(WARNING) << fmt::format(xorstr_("{} was flagged as a modder for spawning cash"), sender_name);
+					string msg = fmt::format(xorstr_("{} was flagged as a modder for spawning cash"), sender_name);
 
-					g_notification_service->push_warning(xorstr_("Modder detection"), fmt::format(xorstr_("Flagged {} as a modder"), sender_name));
+					LOG(WARNING) << msg;
+					g_notification_service->push_warning(xorstr_("Modder detection"), msg);
 				}
 
 				break;
@@ -122,13 +146,14 @@ namespace big
 			case RockstarEvent::NETWORK_CHECK_CODE_CRCS_EVENT:
 			case RockstarEvent::REPORT_MYSELF_EVENT:
 			{
-				LOG(WARNING) << fmt::format(xorstr_("{} was flagged as a modder for sending unwanted events"), sender_name);
+				string msg = fmt::format(xorstr_("{} was flagged as a modder for sending unwanted events"), sender_name);
 
-				g_notification_service->push_warning(xorstr_("Modder detection"), fmt::format(xorstr_("Flagged {} as a modder"), source_player->get_name()));
+				LOG(WARNING) << msg;
+				g_notification_service->push_warning(xorstr_("Modder detection"), msg);
 
 				break;
 			}
-		}
+			}
 
 		} //End switch case
 
