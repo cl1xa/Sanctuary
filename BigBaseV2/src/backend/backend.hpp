@@ -15,5 +15,6 @@ namespace big
 	public:
 		static void update_pointers();
 		static void hud_transition_state();
+		static void no_idle_kick();
 	};
 }

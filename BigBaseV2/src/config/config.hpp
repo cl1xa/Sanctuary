@@ -22,6 +22,7 @@ namespace big
 				bool script_events = false;
 				bool game_events = false;
 				bool desync = false;
+				bool idle = false;
 
 			}kick;
 

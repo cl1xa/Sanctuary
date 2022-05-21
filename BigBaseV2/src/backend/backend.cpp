@@ -12,10 +12,7 @@ namespace big
 		{
 			backend_looped::update_pointers();
 			backend_looped::hud_transition_state();
-
-			//Temporary no idle kick spot
-			*script_global(1644209).at(1149).as<int*>() = 0;
-			*script_global(1644209).at(1165).as<int*>() = 0;
+			backend_looped::no_idle_kick();
 
 		} QUEUE_JOB_END_CLAUSE
 	}
