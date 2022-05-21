@@ -12,7 +12,7 @@ Many fundamental changes will be made very quickly throughout the development pr
 
 * Script event handler
 * Scripted game event protection
-* //Desync kick protection
+* Host desync prevention
 
 [CRASH PROTECTION]
 
@@ -29,6 +29,7 @@ Many fundamental changes will be made very quickly throughout the development pr
 * Chat message handler
 * Terminate online loading screens
 * Remove transaction rate limit
+* Freemode script termiantion prevention (forced on upon injection)
 
 [MISC FEATURES]
 
