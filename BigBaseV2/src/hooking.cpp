@@ -42,8 +42,10 @@ namespace big
 		m_send_net_info_to_lobby("Send NET Info to Lobby", g_pointers->m_send_net_info_to_lobby, &hooks::send_net_info_to_lobby),
 
 		m_player_has_joined_hook("Player Has Joined", g_pointers->m_player_has_joined, &hooks::player_join),
-		
 		m_player_has_left_hook("Player Has Left", g_pointers->m_player_has_left, &hooks::player_leave),
+
+		m_receive_net_message_hook("Receive Net Message", g_pointers->m_receive_net_message, &hooks::receive_net_message),
+		m_get_network_event_data_hook("Get Network Event Data", g_pointers->m_get_network_event_data, &hooks::get_network_event_data),
 
 		m_chat_receive_hook("Chat Receive", g_pointers->m_chat_receive, &hooks::chat_receive)
 	{
@@ -89,6 +91,9 @@ namespace big
 
 		m_send_net_info_to_lobby.enable();
 
+		m_receive_net_message_hook.enable();
+		m_get_network_event_data_hook.enable();
+
 		m_chat_receive_hook.enable();
 
 		m_enabled = true;
@@ -101,6 +106,9 @@ namespace big
 		m_enabled = false;
 
 		m_chat_receive_hook.disable();
+
+		m_get_network_event_data_hook.disable();
+		m_receive_net_message_hook.disable();
 
 		m_send_net_info_to_lobby.disable();
 

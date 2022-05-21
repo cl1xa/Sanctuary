@@ -202,7 +202,17 @@ namespace big
 		{
 			m_network_group_override = ptr.as<PVOID>();
 		});
+
+		main_batch.add("Receive Net Message", "48 8B C4 48 89 58 08 48 89 68 10 48 89 70 18 48 89 78 20 41 54 41 56 41 57 48 83 EC 20 4C 8B 71 50 33 ED", [this](memory::handle ptr)
+		{
+			m_receive_net_message = ptr.as<PVOID>();
+		});
 		
+		main_batch.add("Get Network Event Data", "E9 ? ? ? ? E9 ? ? ? ? E9 ? ? ? ? E9 ? ? ? ? E9 ? ? ? ? CC FF 50 28", [this](memory::handle ptr)
+		{
+			m_get_network_event_data = ptr.as<PVOID>();
+		});
+
 		main_batch.add("Chat Receive", "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC 30 49 8B F0 4D 8B C1", [this](memory::handle ptr)
 		{
 			m_chat_receive = ptr.as<PVOID>();

@@ -11,7 +11,7 @@ namespace big
 
 		LOG(G3LOG_DEBUG) << msg;
 		if (g_config.settings.notify_debug)
-			g_notification_service->push_warning(xorstr_("Network Player Manager"), msg);
+			g_notification_service->push(xorstr_("Network Player Manager"), msg);
 
 		return g_hooking->m_network_player_mgr_shutdown_hook.get_original<decltype(&hooks::network_player_mgr_shutdown)>()(_this);
 	}

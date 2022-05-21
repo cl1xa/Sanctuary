@@ -21,6 +21,7 @@ namespace big
 			{
 				bool script_events = false;
 				bool game_events = false;
+				bool desync = false;
 
 			}kick;
 
@@ -50,6 +51,7 @@ namespace big
 		{
 			bool notify_players = false;
 			bool notify_debug = false;
+			bool notify_scripts = false;
 
 		}settings;
 	};

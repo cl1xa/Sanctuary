@@ -10,7 +10,7 @@ namespace big
 		string msg = fmt::format(xorstr_("Script Thread '{}' terminated."), thread->m_name);
 
 		LOG(INFO) << msg;
-		if (g_config.settings.notify_debug)
+		if (g_config.settings.notify_scripts)
 			g_notification_service->push(xorstr_("Script Thread Termination"), msg);
 
 		g_native_hooks->do_cleanup_for_thread(thread);

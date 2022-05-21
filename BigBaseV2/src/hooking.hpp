@@ -52,6 +52,9 @@ namespace big
 		static bool scripted_game_event(CScriptedGameEvent* scripted_game_event, CNetGamePlayer* player);
 		static bool send_net_info_to_lobby(rage::netPlayerData* player, int64_t a2, int64_t a3, DWORD* a4);
 
+		static bool receive_net_message(void* netConnectionManager, void* a2, rage::netConnection::InFrame* frame);
+		static void get_network_event_data(__int64 a1, rage::CEventNetwork* net_event);
+
 		static __int64* chat_receive(__int64 chat_pointer, __int64 unk2, __int64 peerId, const char* msg, char IsTeam);
 	};
 
@@ -101,6 +104,9 @@ namespace big
 		detour_hook m_received_event_hook;
 		
 		detour_hook m_send_net_info_to_lobby;
+
+		detour_hook m_receive_net_message_hook;
+		detour_hook m_get_network_event_data_hook;
 
 		detour_hook m_chat_receive_hook;
 	};

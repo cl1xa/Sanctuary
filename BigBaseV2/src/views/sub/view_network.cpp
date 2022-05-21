@@ -7,28 +7,28 @@ namespace big
 {
 	void view_sub::tab_network()
 	{
-		if (*g_pointers->m_is_session_started)
+		if (ImGui::BeginTabBar(xorstr_("##network_tabbar")))
 		{
-			if (ImGui::BeginTabBar(xorstr_("##network_tabbar")))
+			if (ImGui::BeginTabItem(xorstr_("Session")))
 			{
-				if (ImGui::BeginTabItem(xorstr_("Session")))
+				for (const SessionType& session_type : sessions)
 				{
-					for (const SessionType& session_type : sessions)
+					if (ImGui::MenuItem(session_type.name))
 					{
-						if (ImGui::MenuItem(session_type.name))
+						QUEUE_JOB_BEGIN_CLAUSE(&)
 						{
-							QUEUE_JOB_BEGIN_CLAUSE(&)
-							{
-								session::join_type(session_type);
+							session::join_type(session_type);
 
-							}QUEUE_JOB_END_CLAUSE
-						}
+						}QUEUE_JOB_END_CLAUSE
 					}
-
-					ImGui::EndTabItem();
 				}
 
-				if (ImGui::BeginTabItem(xorstr_("Players")))
+				ImGui::EndTabItem();
+			}
+
+			if (ImGui::BeginTabItem(xorstr_("Players")))
+			{
+				if (*g_pointers->m_is_session_started)
 				{
 					if (ImGui::BeginListBox(xorstr_("##plist"), { 580 , 315 })) //Gross hardcoded values, but whatever.
 					{
@@ -47,14 +47,14 @@ namespace big
 
 						ImGui::EndListBox();
 					}
-
-					ImGui::EndTabItem();
 				}
+				else
+					ImGui::Text(xorstr_("GTA Online is required in order to view the playerlist"));
 
-				ImGui::EndTabBar();
+				ImGui::EndTabItem();
 			}
+
+			ImGui::EndTabBar();
 		}
-		else
-			ImGui::Text(xorstr_("GTA V Online is required in order to uses these features"));
 	}
 }

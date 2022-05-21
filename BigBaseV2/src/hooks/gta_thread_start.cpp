@@ -12,7 +12,7 @@ namespace big
 			string msg = fmt::format(xorstr_("Script Thread '{}' started."), name);
 
 			LOG(INFO) << msg;
-			if (g_config.settings.notify_debug)
+			if (g_config.settings.notify_scripts)
 				g_notification_service->push(xorstr_("Script Thread Startup"), msg);
 		}
 

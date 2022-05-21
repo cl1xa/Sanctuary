@@ -9,6 +9,7 @@ namespace big
 	{
 		ImGui::Checkbox(xorstr_("Notify players"), &g_config.settings.notify_players);
 		ImGui::Checkbox(xorstr_("Notify debug"), &g_config.settings.notify_debug);
+		ImGui::Checkbox(xorstr_("Notify scripts"), &g_config.settings.notify_scripts);
 
 		if (ImGui::Button("NET_BAIL SELF"))
 		{

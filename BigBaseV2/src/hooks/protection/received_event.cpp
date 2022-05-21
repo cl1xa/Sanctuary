@@ -22,7 +22,6 @@ namespace big
 				if (g_config.settings.notify_debug)
 					g_notification_service->push_warning(xorstr_("Event Protocol"), msg);
 
-				g_pointers->m_send_event_ack(event_manager, source_player, target_player, event_index, event_handled_bitset);
 				return;
 			}
 
@@ -30,9 +29,12 @@ namespace big
 			{
 				switch ((RockstarEvent)event_id)
 				{
+					//Blocking these can either crash you or cause weird issues
 				case RockstarEvent::REMOTE_SCRIPT_INFO_EVENT:
 				case RockstarEvent::REMOTE_SCRIPT_LEAVE_EVENT:
 				case RockstarEvent::NETWORK_CHECK_EXE_SIZE_EVENT:
+				case RockstarEvent::NETWORK_GARAGE_OCCUPIED_STATUS_EVENT:
+					g_pointers->m_send_event_ack(event_manager, source_player, target_player, event_index, event_handled_bitset);
 					break;
 
 				default:
@@ -42,7 +44,6 @@ namespace big
 					if (g_config.settings.notify_debug)
 						g_notification_service->push_warning(xorstr_("Event Protocol"), msg);
 
-					g_pointers->m_send_event_ack(event_manager, source_player, target_player, event_index, event_handled_bitset);
 					return;
 				}
 			}
@@ -76,7 +77,6 @@ namespace big
 						LOG(WARNING) << msg;
 						g_notification_service->push_warning(xorstr_("Protection"), msg);
 
-						g_pointers->m_send_event_ack(event_manager, source_player, target_player, event_index, event_handled_bitset);
 						return;
 					}
 
@@ -101,14 +101,11 @@ namespace big
 				const auto args = scripted_game_event->m_args;
 				const auto hash = static_cast<eRemoteEvent>(args[0]);
 
-				if (g_config.settings.notify_debug)
-					fmt::format(xorstr_("Player: {} sent script event: {}"), source_player->get_name(), int(hash));
+				/*if (g_config.settings.notify_debug)
+					LOG(INFO) << fmt::format(xorstr_("Player: {} sent script event: {}"), source_player->get_name(), int(hash));*/
 
 				if (hooks::scripted_game_event(scripted_game_event.get(), source_player))
-				{
-					g_pointers->m_send_event_ack(event_manager, source_player, target_player, event_index, event_handled_bitset);
 					return;
-				}
 
 				buffer->Seek(0);
 			}
@@ -140,7 +137,7 @@ namespace big
 					g_notification_service->push_warning(xorstr_("Modder detection"), msg);
 				}
 
-				break;
+				return;
 			}
 
 			case RockstarEvent::NETWORK_CHECK_CODE_CRCS_EVENT:
@@ -151,7 +148,7 @@ namespace big
 				LOG(WARNING) << msg;
 				g_notification_service->push_warning(xorstr_("Modder detection"), msg);
 
-				break;
+				return;
 			}
 			}
 
