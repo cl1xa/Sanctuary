@@ -1,6 +1,6 @@
 #include "common.hpp"
 #include "file_manager.hpp"
-#include "fonts/fonts.hpp"
+#include "views/font.hpp"
 #include "gui.hpp"
 #include "pointers.hpp"
 #include "renderer.hpp"
@@ -17,14 +17,11 @@ namespace big
 		m_dxgi_swapchain(*g_pointers->m_swapchain)
 	{
 		void *d3d_device{};
+
 		if (SUCCEEDED(m_dxgi_swapchain->GetDevice(__uuidof(ID3D11Device), &d3d_device)))
-		{
 			m_d3d_device.Attach(static_cast<ID3D11Device*>(d3d_device));
-		}
 		else
-		{
-			throw std::runtime_error("Failed to get D3D device.");
-		}
+			throw std::runtime_error(xorstr_("Failed to get D3D device."));
 
 		m_d3d_device->GetImmediateContext(m_d3d_device_context.GetAddressOf());
 
@@ -42,7 +39,7 @@ namespace big
 		font_cfg.FontDataOwnedByAtlas = false;
 		std::strcpy(font_cfg.Name, "Storopia");
 
-		m_font = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(font_storopia), sizeof(font_storopia), 20.f, &font_cfg);
+		m_font = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(font_rubik), sizeof(font_rubik), 20.f, &font_cfg);
 
 		g_gui.dx_init();
 		g_renderer = this;
@@ -119,7 +116,6 @@ namespace big
 				break;
 			#endif
 			}
-
 		}
 
 		if (g_gui.m_opened)

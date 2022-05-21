@@ -16,7 +16,7 @@ namespace big
 					string msg = xorstr_("Purged transaction rate limit spam");
 
 					LOG(WARNING) << msg;
-					g_notification_service->push_warning(xorstr_("Transaction Rate Limit"), msg);
+					g_notification_service->push_warning(xorstr_("Rate Limit"), msg);
 
 					*script_global(4529830).as<int*>() = 0;
 					return;

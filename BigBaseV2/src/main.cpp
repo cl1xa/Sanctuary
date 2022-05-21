@@ -9,7 +9,6 @@
 #include "thread_pool.hpp"
 
 #include "native_hooks/native_hooks.hpp"
-#include "services/globals_service.hpp"
 #include "services/player_service.hpp"
 #include "services/notification_service.hpp"
 
@@ -61,7 +60,6 @@ BOOL APIENTRY DllMain(HMODULE hmod, DWORD reason, PVOID)
 				auto thread_pool_instance = std::make_unique<thread_pool>();
 				LOG(INFO) << "Thread pool initialized.";
 
-				auto globals_service_instace = std::make_unique<globals_service>();
 				auto notification_service_instance = std::make_unique<notification_service>();
 				auto player_service_instance = std::make_unique<player_service>();
 				LOG(INFO) << "Registered service instances...";
@@ -97,9 +95,10 @@ BOOL APIENTRY DllMain(HMODULE hmod, DWORD reason, PVOID)
 
 				player_service_instance.reset();
 				LOG(INFO) << "Player Service reset.";
-				globals_service_instace.reset();
-				LOG(INFO) << "Globals Service reset.";
-				LOG(INFO) << "Services uninitialized.";
+				notification_service_instance.reset();
+				LOG(INFO) << "Notification Service reset.";
+
+				LOG(INFO) << "All services have been reset.";
 
 				// Make sure that all threads created don't have any blocking loops
 				// otherwise make sure that they have stopped executing

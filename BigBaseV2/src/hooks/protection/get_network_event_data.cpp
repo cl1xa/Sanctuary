@@ -15,8 +15,11 @@ namespace big
 				LOG(WARNING) << msg;
 				g_notification_service->push_warning(xorstr_("Protections"), msg);
 
-				break;
+				return;
 			}
+
+			default: //May be useful in the future
+				break;
 		}
 
 		return g_hooking->m_get_network_event_data_hook.get_original<decltype(&get_network_event_data)>()(a1, net_event);

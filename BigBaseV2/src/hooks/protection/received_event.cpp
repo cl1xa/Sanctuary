@@ -8,13 +8,12 @@ namespace big
 	{
 		const char* sender_name = source_player->get_name();
 
-		//This looks like garbage but it works... I will clean this up in the future.
 		if (g_config.protection.misc.event_protocol_cleanup)
 		{
 			const auto event_name = *(char**)((DWORD64)event_manager + 8i64 * event_id + 243376);
 
 			//This shouldn't ever happen, but if it does we can catch it.
-			if (event_manager == nullptr || event_name == nullptr || source_player == nullptr || target_player == nullptr || buffer == nullptr)
+			if (event_id > 91u || event_manager == nullptr || event_name == nullptr || source_player == nullptr || target_player == nullptr || buffer == nullptr)
 			{
 				string msg = fmt::format(xorstr_("Malformed protocol information from: {} | {}"), sender_name, event_name);
 
@@ -22,31 +21,38 @@ namespace big
 				if (g_config.settings.notify_debug)
 					g_notification_service->push_warning(xorstr_("Event Protocol"), msg);
 
+				//Send event back to them
+				g_pointers->m_send_event_ack(event_manager, source_player, target_player, event_index, event_handled_bitset);
+
+				//Block event
 				return;
 			}
 
-			if (event_id > 91u || source_player->m_player_id < 0 || source_player->m_player_id >= 32)
-			{
-				switch ((RockstarEvent)event_id)
-				{
-					//Blocking these can either crash you or cause weird issues
-				case RockstarEvent::REMOTE_SCRIPT_INFO_EVENT:
-				case RockstarEvent::REMOTE_SCRIPT_LEAVE_EVENT:
-				case RockstarEvent::NETWORK_CHECK_EXE_SIZE_EVENT:
-				case RockstarEvent::NETWORK_GARAGE_OCCUPIED_STATUS_EVENT:
-					g_pointers->m_send_event_ack(event_manager, source_player, target_player, event_index, event_handled_bitset);
-					break;
+			//Commenting this out for now, it is causing me to crash. Will look into it later.
+			// 
+			////If player is joining, and not already in the lobby
+			//if (source_player->m_player_id < 0 || source_player->m_player_id >= 32)
+			//{
+			//	switch ((RockstarEvent)event_id)
+			//	{
+			//		//Blocking these can either crash you or cause weird issues
+			//	case RockstarEvent::REMOTE_SCRIPT_INFO_EVENT:
+			//	case RockstarEvent::REMOTE_SCRIPT_LEAVE_EVENT:
+			//	case RockstarEvent::NETWORK_CHECK_EXE_SIZE_EVENT:
+			//	case RockstarEvent::NETWORK_GARAGE_OCCUPIED_STATUS_EVENT:
+			//		break;
 
-				default:
-					string msg = fmt::format(xorstr_("Purged unwanted protocol event: {} from: {}"), event_name, sender_name);
+			//	default:
+			//		string msg = fmt::format(xorstr_("Purged unwanted protocol event: {} from: {}"), event_name, sender_name);
 
-					LOG(WARNING) << msg;
-					if (g_config.settings.notify_debug)
-						g_notification_service->push_warning(xorstr_("Event Protocol"), msg);
+			//		LOG(WARNING) << msg;
+			//		if (g_config.settings.notify_debug)
+			//			g_notification_service->push_warning(xorstr_("Event Protocol"), msg);
 
-					return;
-				}
-			}
+			//		//Block event, but theres no need to send anything back because we know they're valid (we just don't want them)
+			//		return;
+			//	}
+			//}
 		}
 
 		switch ((RockstarEvent)event_id)
@@ -72,11 +78,15 @@ namespace big
 
 					if (action >= 16 && action <= 18)
 					{
-						string msg = fmt::format(xorstr_("{} attempted to send TASK_VEHICLE_TEMP_ACTION crash."), sender_name);
+						string msg = fmt::format(xorstr_("{} attempted to send TASK_VEHICLE_TEMP_ACTION crash"), sender_name);
 
 						LOG(WARNING) << msg;
 						g_notification_service->push_warning(xorstr_("Protection"), msg);
 
+						//Send event back to them
+						g_pointers->m_send_event_ack(event_manager, source_player, target_player, event_index, event_handled_bitset);
+
+						//Block event
 						return;
 					}
 
@@ -101,12 +111,25 @@ namespace big
 				const auto args = scripted_game_event->m_args;
 				const auto hash = static_cast<eRemoteEvent>(args[0]);
 
-				/*if (g_config.settings.notify_debug)
-					LOG(INFO) << fmt::format(xorstr_("Player: {} sent script event: {}"), source_player->get_name(), int(hash));*/
+				if (g_config.settings.script_event_logger)
+				{
+					LOG(G3LOG_DEBUG) << xorstr_("===");
+					LOG(G3LOG_DEBUG) << fmt::format(xorstr_("PLAYER: {} | EVENT: {}"), source_player->get_name(), int(hash));
+					for (std::size_t i = 1; i < sizeof(args); i++)
+						LOG(G3LOG_DEBUG) << fmt::format(xorstr_("Arg #{} : {}"), i, args[i]);
+					LOG(G3LOG_DEBUG) << xorstr_("===");
+				}
 
+				//If the user sends us an unwanted event
 				if (hooks::scripted_game_event(scripted_game_event.get(), source_player))
-					return;
+				{
+					//Send event back to them
+					g_pointers->m_send_event_ack(event_manager, source_player, target_player, event_index, event_handled_bitset);
 
+					//Block event
+					return;
+				}
+					
 				buffer->Seek(0);
 			}
 
@@ -115,7 +138,12 @@ namespace big
 
 		} //End switch case
 
-		//I know having two switch cases is stupid, but it's just a placeholder for now.
+		if (g_config.protection.kick.game_events)
+		{
+			//todo: add game event protection
+		}
+
+		//I know having multiple cases is stupid, but it's just a placeholder for now.
 		if (g_config.protection.misc.modder_detection)
 		{
 			switch ((RockstarEvent)event_id)
@@ -137,6 +165,7 @@ namespace big
 					g_notification_service->push_warning(xorstr_("Modder detection"), msg);
 				}
 
+				//Block event, we don't want them spawning anything on us
 				return;
 			}
 
@@ -148,16 +177,12 @@ namespace big
 				LOG(WARNING) << msg;
 				g_notification_service->push_warning(xorstr_("Modder detection"), msg);
 
-				return;
+				//Pass event
+				break;
 			}
 			}
 
 		} //End switch case
-
-		if (g_config.protection.kick.game_events)
-		{
-			//todo: add game event protection
-		}
 
 		return g_hooking->m_received_event_hook.get_original<decltype(&received_event)>()(event_manager, source_player, target_player, event_id, event_index, event_handled_bitset, unk, buffer);
 	}

@@ -53,6 +53,7 @@ namespace big
 			bool notify_players = false;
 			bool notify_debug = false;
 			bool notify_scripts = false;
+			bool script_event_logger = false;
 
 		}settings;
 	};

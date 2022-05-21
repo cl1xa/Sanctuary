@@ -7,7 +7,7 @@ namespace big
 	{
 		g_player_service->do_cleanup();
 
-		string msg = xorstr_("Leaving session and cleaning up player data.");
+		string msg = xorstr_("Leaving session and cleaning up player data");
 
 		LOG(G3LOG_DEBUG) << msg;
 		if (g_config.settings.notify_debug)
