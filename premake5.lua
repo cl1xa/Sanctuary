@@ -1,3 +1,36 @@
+Skip to content
+Search or jump to…
+Pull requests
+Issues
+Marketplace
+Explore
+ 
+@cl1xa 
+Yimura
+/
+YimMenu
+Public
+Code
+Issues
+36
+Pull requests
+6
+Discussions
+Actions
+Projects
+2
+Wiki
+Security
+Insights
+YimMenu/premake5.lua
+@Yimura
+Yimura feat(premake): Added GTAV-Classes as subproject
+Latest commit 8f4fd48 yesterday
+ History
+ 3 contributors
+@Yimura@poopfart77@Pocakking
+248 lines (201 sloc)  4.77 KB
+   
 workspace "BigBaseV2"
 	architecture "x64"
 	startproject "BigBaseV2"
@@ -105,6 +138,27 @@ workspace "BigBaseV2"
 		removefiles
 		{
 		    "vendor/%{prj.name}/src/crashhandler_unix.cpp"
+		}
+
+		DeclareMSVCOptions()
+		DeclareDebugOptions()
+
+	project "GTAV-Classes"
+		location "vendor/%{prj.name}"
+		kind "StaticLib"
+		language "C++"
+
+		targetdir ("bin/lib/" .. outputdir)
+		objdir ("bin/lib/int/" .. outputdir .. "/%{prj.name}")
+
+		files
+		{
+			"vendor/%{prj.name}/**.hpp"
+		}
+
+		includedirs
+		{
+			"vendor/%{prj.name}"
 		}
 
 		DeclareMSVCOptions()
@@ -225,3 +279,15 @@ workspace "BigBaseV2"
 		    flags { "FatalWarnings", "NoManifest" }
 		    defines { "DIST" }
 		    optimize "speed"
+© 2022 GitHub, Inc.
+Terms
+Privacy
+Security
+Status
+Docs
+Contact GitHub
+Pricing
+API
+Training
+Blog
+About

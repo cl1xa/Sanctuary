@@ -130,6 +130,7 @@ namespace big
 		main_batch.add("Request Control of Entity PATCH", "48 89 5C 24 ? 57 48 83 EC 20 8B D9 E8 ? ? ? ? ? ? ? ? 8B CB", [this](memory::handle ptr)
 		{
 			m_spectator_check = ptr.add(0x13).as<PUSHORT>();
+			*m_spectator_check = 0x9090;
 		});
 
 		main_batch.add("Replay Interface", "48 8D 0D ? ? ? ? 48 8B D7 E8 ? ? ? ? 48 8D 0D ? ? ? ? 8A D8 E8 ? ? ? ? 84 DB 75 13 48 8D 0D", [this](memory::handle ptr)
@@ -243,8 +244,6 @@ namespace big
 
 		if (!m_hwnd)
 			throw std::runtime_error("Failed to find the game's window.");
-
-		*m_spectator_check = 0x9090;
 
 		g_pointers = this;
 	}
