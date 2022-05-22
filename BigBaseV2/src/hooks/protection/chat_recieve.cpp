@@ -1,12 +1,10 @@
 #include "gta/joaat.hpp"
 #include "hooking.hpp"
-#include "natives.hpp"
 #include "script_global.hpp"
-#include "util/find.hpp"
 
 namespace big
 {
-	std::string previous_message = "";
+	string previous_message = "";
 
 	__int64* hooks::chat_receive(__int64 chat_pointer, __int64 unk2, __int64 peerId, const char* msg, char IsTeam)
 	{

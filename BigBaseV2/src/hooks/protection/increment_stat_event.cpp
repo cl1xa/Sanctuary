@@ -11,7 +11,7 @@ namespace big
 		case RAGE_JOAAT("MPPLY_VC_HATE"):
 		case RAGE_JOAAT("MPPLY_TC_ANNOYINGME"):
 		case RAGE_JOAAT("MPPLY_TC_HATE"):
-			const std::string report = fmt::format("From: {}", sender->get_name());
+			const string report = fmt::format("From: {}", sender->get_name());
 
 			LOG(INFO) << "Blocked report; " << report;
 

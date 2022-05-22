@@ -28,7 +28,7 @@ namespace big
 
 	bool hooks::receive_net_message(void* netConnectionManager, void* a2, rage::netConnection::InFrame* frame)
 	{
-		if (g_config.protection.misc.desync) //Add proper logging for this
+		if (g_config.protection.sync.host_desync) //Add proper logging for this
 		{
 			if (frame->get_type() == 4)
 			{
@@ -42,20 +42,20 @@ namespace big
 				{
 					switch (msg_type)
 					{
-						//Desync Kick
+						//Host desync
 					case rage::netConnection::MessageType::MsgNetComplaint:
 					{
 						uint64_t host_token{};
 						buffer.ReadQWord(&host_token, 64);
 
-						std::vector<CNetGamePlayer*> players;
+						vector<CNetGamePlayer*> players;
 
 						uint32_t num_of_host_token{};
 						buffer.ReadDword(&num_of_host_token, 32);
 
 						if (num_of_host_token <= 64)
 						{
-							std::vector<uint64_t> host_token_list{};
+							vector<uint64_t> host_token_list{};
 
 							for (uint32_t i = 0; i < num_of_host_token; i++)
 							{

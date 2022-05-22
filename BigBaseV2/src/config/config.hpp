@@ -5,24 +5,24 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
-using namespace std;
-
 namespace big
 {
 	class config
 	{
 	public:
-		static bool save(string file);
-		static bool load(string file);
+		static bool save(std::string file);
+		static bool load(std::string file);
 
 		struct
 		{
 			struct
 			{
+				bool block_main_script = false;
+				bool event_protocol_cleanup = false;
 				bool script = false;
 				//bool game = false;
-				//bool action = false; //Depricated
-				//bool control = false; //Depricated
+				//bool action = false;
+				//bool control = false;
 
 			}events;
 
@@ -34,15 +34,19 @@ namespace big
 
 			}crash;
 
+			struct 
+			{
+				bool host_desync = false;
+
+			}sync;
+
 			struct
 			{
-				bool desync = false;
 				bool idle = false;
 				bool chat_spam = false;
 				bool terminate_loading_screens = false;
 				bool rate_limit = false;
 				bool modder_detection = false;
-				bool event_protocol_cleanup = false;
 				bool optimize_loading = false;
 				//bool block_reports = false;
 

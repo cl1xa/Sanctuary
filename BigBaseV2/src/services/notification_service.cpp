@@ -14,32 +14,32 @@ namespace big
 
 	void notification_service::push(notification n)
 	{
-		this->notifications.emplace(std::hash<std::string>{}(n.message), n);
+		this->notifications.emplace(hash<string>{}(n.message), n);
 	}
 
-	void notification_service::push(std::string title, std::string message)
+	void notification_service::push(string title, string message)
 	{
-		this->push({ NotificationType::INFO, title, message, std::chrono::system_clock::now(), 3000.f , 1.f});
+		this->push({ NotificationType::INFO, title, message, chrono::system_clock::now(), 3000.f , 1.f});
 	}
 
-	void notification_service::push_warning(std::string title, std::string message)
+	void notification_service::push_warning(string title, string message)
 	{
-		this->push({ NotificationType::WARNING, title, message, std::chrono::system_clock::now(), 3000.f , 1.f });
+		this->push({ NotificationType::WARNING, title, message, chrono::system_clock::now(), 3000.f , 1.f });
 	}
 
-	void notification_service::push_error(std::string title, std::string message)
+	void notification_service::push_error(string title, string message)
 	{
-		this->push({ NotificationType::DANGER, title, message, std::chrono::system_clock::now(), 3000.f , 1.f });
+		this->push({ NotificationType::DANGER, title, message, chrono::system_clock::now(), 3000.f , 1.f });
 	}
 
-	std::vector<notification> notification_service::get()
+	vector<notification> notification_service::get()
 	{
-		std::vector<notification> notifications_to_sent;
-		std::vector<std::size_t> to_remove;
+		vector<notification> notifications_to_sent;
+		vector<size_t> to_remove;
 		for (auto& n : this->notifications) 
 		{
-			std::chrono::time_point<std::chrono::system_clock> curTime = std::chrono::system_clock::now();
-			const float time_diff = (float)std::chrono::duration_cast<std::chrono::milliseconds>(curTime - n.second.created_on).count();
+			chrono::time_point<chrono::system_clock> curTime = chrono::system_clock::now();
+			const float time_diff = (float)chrono::duration_cast<chrono::milliseconds>(curTime - n.second.created_on).count();
 			n.second.alpha = 1;
 
 			if (n.second.destroy_in <= time_diff) 
@@ -53,7 +53,7 @@ namespace big
 			else to_remove.push_back(n.first);
 		}
 
-		for (std::size_t k : to_remove)
+		for (size_t k : to_remove)
 			this->notifications.erase(k);
 
 		return notifications_to_sent;

@@ -1,6 +1,5 @@
 #pragma once
 #include "fiber_pool.hpp"
-#include "natives.hpp"
 #include "script.hpp"
 
 namespace big::scripts

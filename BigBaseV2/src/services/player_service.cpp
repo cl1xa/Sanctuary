@@ -75,10 +75,10 @@ namespace big
 		return net_game_player == m_net_game_player;
 	}
 
-	std::string player::to_lowercase_identifier()
+	string player::to_lowercase_identifier()
 	{
-		std::string lower = this->get_name();
-		std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
+		string lower = this->get_name();
+		transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
 
 		return lower;
 	}
@@ -91,10 +91,10 @@ namespace big
 			{
 				if (CNetGamePlayer* net_game_player = network_player_mgr->m_player_list[i]; net_game_player != nullptr)
 				{
-					std::unique_ptr<player> plyr = std::make_unique<player>(net_game_player);
+					unique_ptr<player> plyr = make_unique<player>(net_game_player);
 					plyr->m_is_friend = friends_service::is_friend(plyr);
 
-					m_players.emplace(plyr->to_lowercase_identifier(), std::move(plyr));
+					m_players.emplace(plyr->to_lowercase_identifier(), move(plyr));
 				}
 			}
 		}
@@ -117,9 +117,9 @@ namespace big
 		m_players.clear();
 	}
 
-	player* player_service::get_by_name(std::string name)
+	player* player_service::get_by_name(string name)
 	{
-		std::transform(name.begin(), name.end(), name.begin(), ::tolower);
+		transform(name.begin(), name.end(), name.begin(), ::tolower);
 
 		if (auto it = m_players.find(name); it != m_players.end())
 			return it->second.get();
@@ -129,7 +129,7 @@ namespace big
 
 	player* player_service::get_by_msg_id(uint32_t msg_id)
 	{
-		std::map<std::string, std::unique_ptr<player>>::iterator it;
+		map<string, unique_ptr<player>>::iterator it;
 		for (it = m_players.begin(); it != m_players.end(); it++)
 		{
 			if (it->second.get()->get_net_game_player()->m_msg_id == msg_id)
@@ -140,7 +140,7 @@ namespace big
 
 	player* player_service::get_by_host_token(uint64_t token)
 	{
-		std::map<std::string, std::unique_ptr<player>>::iterator it;
+		map<string, unique_ptr<player>>::iterator it;
 		for (it = m_players.begin(); it != m_players.end(); it++)
 		{
 			if (it->second.get()->get_net_data()->m_host_token == token)
@@ -159,10 +159,10 @@ namespace big
 		if (net_game_player == nullptr)
 			return;
 
-		std::unique_ptr<player> plyr = std::make_unique<player>(net_game_player);
+		unique_ptr<player> plyr = make_unique<player>(net_game_player);
 		plyr->m_is_friend = friends_service::is_friend(plyr);
 
-		m_players.emplace(plyr->to_lowercase_identifier(), std::move(plyr));
+		m_players.emplace(plyr->to_lowercase_identifier(), move(plyr));
 	}
 
 	void player_service::player_leave(CNetGamePlayer* net_game_player)
@@ -173,7 +173,7 @@ namespace big
 		if (m_selected_player && m_selected_player->equals(net_game_player))
 			m_selected_player = nullptr;
 
-		std::unique_ptr<player> plyr = std::make_unique<player>(net_game_player);
+		unique_ptr<player> plyr = make_unique<player>(net_game_player);
 		m_players.erase(plyr->to_lowercase_identifier());
 	}
 

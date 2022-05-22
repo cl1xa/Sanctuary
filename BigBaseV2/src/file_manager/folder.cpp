@@ -19,7 +19,7 @@ namespace big
 	file folder::get_file(std::filesystem::path file_path) const
 	{
 		if (file_path.is_absolute())
-			throw std::exception(xorstr_("folder#get_file requires a relative path."));
+			throw exception(xorstr_("folder#get_file requires a relative path."));
 
 		return file(m_folder_path / file_path);
 	}

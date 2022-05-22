@@ -8,7 +8,7 @@ namespace big
 		friend player_service;
 
 		CNetGamePlayer* m_net_game_player = nullptr;
-		std::string m_identifier;
+		string m_identifier;
 		bool m_is_friend;
 
 	public:
@@ -34,11 +34,11 @@ namespace big
 	protected:
 		bool equals(CNetGamePlayer* net_game_player);
 
-		std::string to_lowercase_identifier();
+		string to_lowercase_identifier();
 
 	};
 
-	typedef std::map<std::string, std::unique_ptr<player>> player_list;
+	typedef map<string, unique_ptr<player>> player_list;
 	class player_service final
 	{
 		player* m_dummy_player{};
@@ -51,7 +51,7 @@ namespace big
 
 		void do_cleanup();
 
-		player* get_by_name(std::string name);
+		player* get_by_name(string name);
 		player* get_by_msg_id(uint32_t msg_id);
 		player* get_by_host_token(uint64_t token);
 		player* get_selected();

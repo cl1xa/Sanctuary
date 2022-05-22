@@ -13,11 +13,11 @@ namespace big
 
 	class native_hooks final
 	{
-		typedef std::pair<rage::scrNativeHash, rage::scrNativeHandler> native_detour;
+		typedef pair<rage::scrNativeHash, rage::scrNativeHandler> native_detour;
 
-		std::map<rage::joaat_t, std::vector<native_detour>> m_native_registrations;
+		map<rage::joaat_t, vector<native_detour>> m_native_registrations;
 
-		std::map<rage::joaat_t, std::unique_ptr<script_hook>> m_script_hooks;
+		map<rage::joaat_t, unique_ptr<script_hook>> m_script_hooks;
 
 	public:
 		native_hooks()
@@ -27,12 +27,10 @@ namespace big
 			add_native_detour(RAGE_JOAAT("freemode"), 0x95914459A87EBA28, freemode::NETWORK_BAIL);
 			add_native_detour(RAGE_JOAAT("freemode"), 0x580CE4438479CC61, freemode::NETWORK_CAN_BAIL);
 
+			add_native_detour(RAGE_JOAAT("freemode"), 0x6EB5F71AA68F2E8E, freemode::REQUEST_SCRIPT);
+
 			//https://github.com/Yimura/YimMenu/discussions/143
 			add_native_detour(RAGE_JOAAT("freemode"), 0x5D10B3795F3FC886, freemode::NETWORK_HAS_RECEIVED_HOST_BROADCAST_DATA);
-
-			//TODO:
-			//https://github.com/cl52902/SaltyV2/blob/1ea5c7742408f2b34795da5baccc328c48f74a12/Salty/src/gui/misc.cpp#L752
-			//https://github.com/cl52902/SaltyV2/blob/1ea5c7742408f2b34795da5baccc328c48f74a12/Salty/src/gui/misc.cpp#L779
 
 			for (const auto& native_detours_for_script : m_native_registrations)
 				if (const GtaThread* thread = gta_util::find_script_thread(native_detours_for_script.first); thread != nullptr && thread->m_context.m_state == rage::eThreadState::running)
@@ -59,12 +57,12 @@ namespace big
 				return;
 			}
 
-			m_native_registrations.emplace(script_hash, std::vector<native_detour>({ { hash, detour } }));
+			m_native_registrations.emplace(script_hash, vector<native_detour>({ { hash, detour } }));
 		}
 
 		bool check_for_thread(const GtaThread* gta_thread)
 		{
-			std::unordered_map<rage::scrNativeHash, rage::scrNativeHandler> native_replacements;
+			unordered_map<rage::scrNativeHash, rage::scrNativeHandler> native_replacements;
 			const auto script_hash = gta_thread->m_script_hash;
 
 			const auto& pair = m_native_registrations.find(script_hash);
@@ -84,7 +82,7 @@ namespace big
 					m_script_hooks.erase(gta_thread->m_script_hash);
 				}
 
-				m_script_hooks.emplace(gta_thread->m_script_hash, std::make_unique<script_hook>(gta_thread->m_script_hash, native_replacements));
+				m_script_hooks.emplace(gta_thread->m_script_hash, make_unique<script_hook>(gta_thread->m_script_hash, native_replacements));
 
 				return true;
 			}

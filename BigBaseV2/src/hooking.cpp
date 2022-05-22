@@ -7,7 +7,6 @@
 #include "gui.hpp"
 #include "hooking.hpp"
 #include "memory/module.hpp"
-#include "natives.hpp"
 #include "pointers.hpp"
 #include "renderer.hpp"
 #include "script_mgr.hpp"

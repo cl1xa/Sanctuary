@@ -1,6 +1,5 @@
 #pragma once
 #include "CNetGamePlayer.hpp"
-#include "natives.hpp"
 #include "script.hpp"
 
 namespace big::notify

@@ -6,8 +6,8 @@
 
 namespace big
 {
-	detour_hook::detour_hook(std::string name, void* target, void* detour) :
-		m_name(std::move(name)),
+	detour_hook::detour_hook(string name, void* target, void* detour) :
+		m_name(move(name)),
 		m_target(target),
 		m_detour(detour)
 	{
@@ -19,7 +19,7 @@ namespace big
 		}
 		else
 		{
-			throw std::runtime_error(fmt::format(xorstr_("Failed to create hook '{}' at 0x{:X} (error: {})"), m_name, reinterpret_cast<std::uintptr_t>(m_target), MH_StatusToString(status)));
+			throw runtime_error(fmt::format(xorstr_("Failed to create hook '{}' at 0x{:X} (error: {})"), m_name, reinterpret_cast<uintptr_t>(m_target), MH_StatusToString(status)));
 		}
 	}
 
@@ -41,7 +41,7 @@ namespace big
 		}
 		else
 		{
-			throw std::runtime_error(fmt::format(xorstr_("Failed to enable hook 0x{:X} ({})"), reinterpret_cast<std::uintptr_t>(m_target), MH_StatusToString(status)));
+			throw runtime_error(fmt::format(xorstr_("Failed to enable hook 0x{:X} ({})"), reinterpret_cast<uintptr_t>(m_target), MH_StatusToString(status)));
 		}
 	}
 
@@ -57,7 +57,7 @@ namespace big
 		}
 	}
 
-	DWORD exp_handler(PEXCEPTION_POINTERS exp, std::string const& name)
+	DWORD exp_handler(PEXCEPTION_POINTERS exp, string const& name)
 	{
 		return exp->ExceptionRecord->ExceptionCode == STATUS_ACCESS_VIOLATION
 			? EXCEPTION_EXECUTE_HANDLER
@@ -69,7 +69,7 @@ namespace big
 		__try
 		{
 			auto ptr = memory::handle(m_target);
-			while (ptr.as<std::uint8_t&>() == 0xE9)
+			while (ptr.as<uint8_t&>() == 0xE9)
 			{
 				ptr = ptr.add(1).rip();
 			}
@@ -80,7 +80,7 @@ namespace big
 		{
 			[this]()
 			{
-				throw std::runtime_error(fmt::format(xorstr_("Failed to fix hook address for '{}'"), m_name));
+				throw runtime_error(fmt::format(xorstr_("Failed to fix hook address for '{}'"), m_name));
 			}();
 		}
 	}

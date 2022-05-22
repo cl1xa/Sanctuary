@@ -1,6 +1,5 @@
 #pragma once
 #include "imgui.h"
-#include "natives.hpp"
 #include "pointers.hpp"
 #include "script.hpp"
 #include "services/player_service.hpp"

@@ -2,7 +2,6 @@
 #include "gta/session_types.hpp"
 #include "script_global.hpp"
 #include "script.hpp"
-#include "natives.hpp"
 
 namespace big::session
 {

@@ -2,7 +2,7 @@
 
 namespace big
 {
-	void hooks::network_group_override(std::int64_t a1, std::int64_t a2, std::int64_t a3)
+	void hooks::network_group_override(int64_t a1, int64_t a2, int64_t a3)
 	{
 		if (g_config.protection.crash.script_world_state)
 		{

@@ -1,5 +1,4 @@
 #include "backend/backend.hpp"
-#include "natives.hpp"
 #include "script_global.hpp"
 
 namespace big

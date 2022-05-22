@@ -4,6 +4,8 @@ namespace big
 {
 	void view_sub::tab_sync()
 	{
-		ImGui::Text(xorstr_("Not implemented yet"));
+		ImGui::Checkbox(xorstr_("Host desync prevention"), &g_config.protection.sync.host_desync);
+		ImGui::Separator();
+		ImGui::Text(xorstr_("Object sync patches not implemented yet"));
 	}
 }

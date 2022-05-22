@@ -6,7 +6,6 @@
 #include "logger.hpp"
 #include "memory/module.hpp"
 #include "memory/pattern.hpp"
-#include "natives.hpp"
 #include "pointers.hpp"
 #include "renderer.hpp"
 #include "script.hpp"

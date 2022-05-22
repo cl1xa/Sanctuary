@@ -9,7 +9,7 @@ namespace big
 
 		memcpy(buffer, &g_config, class_size);
 
-		std::string path = std::getenv("appdata");
+		string path = getenv("appdata");
 		path += "\\Sanctuary\\" + file_name;
 
 		ofstream output(path, ios::binary);
@@ -29,7 +29,7 @@ namespace big
 
 	bool config::load(const string file_name)
 	{
-		std::string path = std::getenv("appdata");
+		string path = getenv("appdata");
 		path += "\\Sanctuary\\" + file_name;
 
 		ifstream input(path, ios::binary);

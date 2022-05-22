@@ -4,7 +4,7 @@
 
 namespace big
 {
-	float draw_notification(float start_pos, ImDrawList* dl, std::string title, std::string message, ImVec4 color)
+	float draw_notification(float start_pos, ImDrawList* dl, string title, string message, ImVec4 color)
 	{
 		ImColor textCol = ImGui::ColorConvertFloat4ToU32({ 1.f, 1.f, 1.f, 1.f });
 		color.w = 0.5f;
@@ -15,11 +15,11 @@ namespace big
 		int j = 0;
 		int prevSpace = 0;
 		float total_size = 0.f;
-		std::vector<std::string> split_points;
+		vector<string> split_points;
 
 		for (int i = 0; i <= message.size(); i++)
 		{
-			std::string current_message = message.substr(j, i - j);
+			string current_message = message.substr(j, i - j);
 
 			if (message.substr(i, 1) == " ")
 				prevSpace = i;
@@ -47,7 +47,7 @@ namespace big
 
 		int i = 0;
 
-		for (std::string txt : split_points)
+		for (string txt : split_points)
 		{
 			dl->AddText({ (float)*g_pointers->m_resolution_x - 350.f, 40.f + (i * 20.f) + start_pos }, textCol, txt.c_str());
 			i++;
@@ -60,7 +60,7 @@ namespace big
 	{
 		ImDrawList* draw_list = ImGui::GetBackgroundDrawList();
 
-		std::vector<notification> notifications = g_notification_service->get();
+		vector<notification> notifications = g_notification_service->get();
 
 		float prev_pos = 0.f;
 

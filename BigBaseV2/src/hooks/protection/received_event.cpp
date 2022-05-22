@@ -8,53 +8,19 @@ namespace big
 	{
 		const char* sender_name = source_player->get_name();
 
-		if (g_config.protection.misc.event_protocol_cleanup)
+		if (g_config.protection.events.event_protocol_cleanup)
 		{
-			const auto event_name = *(char**)((DWORD64)event_manager + 8i64 * event_id + 243376);
-
-			//This shouldn't ever happen, but if it does we can catch it.
-			if (event_id > 91u || event_manager == nullptr || event_name == nullptr || source_player == nullptr || target_player == nullptr || buffer == nullptr)
+			if (event_id > 91u)
 			{
-				string msg = fmt::format(xorstr_("Malformed protocol information from: {} | {}"), sender_name, event_name);
-
-				LOG(WARNING) << msg;
-				if (g_config.settings.notify_debug)
-					g_notification_service->push_warning(xorstr_("Event Protocol"), msg);
-
-				//Send event back to them
 				g_pointers->m_send_event_ack(event_manager, source_player, target_player, event_index, event_handled_bitset);
-
-				//Block event
 				return;
 			}
 
-			//If player is joining, and not already in the lobby
-			if (source_player->m_player_id < 0 || source_player->m_player_id >= 32)
+			const auto event_name = *(char**)((DWORD64)event_manager + 8i64 * event_id + 243376);
+			if (event_name == nullptr || source_player == nullptr || source_player->m_player_id < 0 || source_player->m_player_id >= 32)
 			{
-				switch ((RockstarEvent)event_id)
-				{
-					//Blocking these can either crash you or cause weird issues
-				case RockstarEvent::NETWORK_CHECK_EXE_SIZE_EVENT:
-				case RockstarEvent::NETWORK_ENTITY_AREA_STATUS_EVENT:
-				case RockstarEvent::GAME_WEATHER_EVENT: //Depricated
-				case RockstarEvent::UPDATE_PLAYER_SCARS_EVENT:
-				case RockstarEvent::OBJECT_ID_FREED_EVENT:
-				case RockstarEvent::NETWORK_TRAIN_REPORT_EVENT:
-					break;
-
-				default:
-					string msg = fmt::format(xorstr_("Purged unwanted protocol event: {} from: {}"), event_name, sender_name);
-
-					LOG(WARNING) << msg;
-					if (g_config.settings.notify_debug)
-						g_notification_service->push_warning(xorstr_("Event Protocol"), msg);
-
-					//Send event back to them
-					g_pointers->m_send_event_ack(event_manager, source_player, target_player, event_index, event_handled_bitset);
-
-					//Block event
-					return;
-				}
+				g_pointers->m_send_event_ack(event_manager, source_player, target_player, event_index, event_handled_bitset);
+				return;
 			}
 		}
 
@@ -118,7 +84,7 @@ namespace big
 		{
 			if (g_config.protection.events.script)
 			{
-				const auto scripted_game_event = std::make_unique<CScriptedGameEvent>();
+				const auto scripted_game_event = make_unique<CScriptedGameEvent>();
 
 				buffer->ReadDword(&scripted_game_event->m_args_size, 32);
 
@@ -133,7 +99,7 @@ namespace big
 				{
 					LOG(G3LOG_DEBUG) << xorstr_("===");
 					LOG(G3LOG_DEBUG) << fmt::format(xorstr_("PLAYER: {} | EVENT: {}"), source_player->get_name(), int(hash));
-					for (std::size_t i = 1; i < sizeof(args); i++)
+					for (size_t i = 1; i < sizeof(args); i++)
 						LOG(G3LOG_DEBUG) << fmt::format(xorstr_("Arg #{} : {}"), i, args[i]);
 					LOG(G3LOG_DEBUG) << xorstr_("===");
 				}
