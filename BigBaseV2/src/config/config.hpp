@@ -19,12 +19,12 @@ namespace big
 		{
 			struct
 			{
-				bool script_events = false;
-				bool game_events = false;
-				bool desync = false;
-				bool idle = false;
+				bool script = false;
+				//bool game = false;
+				//bool action = false; //Depricated
+				//bool control = false; //Depricated
 
-			}kick;
+			}events;
 
 			struct
 			{
@@ -36,6 +36,8 @@ namespace big
 
 			struct
 			{
+				bool desync = false;
+				bool idle = false;
 				bool chat_spam = false;
 				bool terminate_loading_screens = false;
 				bool rate_limit = false;

@@ -7,7 +7,7 @@ namespace big
 {
 	void backend_looped::no_idle_kick()
 	{
-		if (g_config.protection.kick.idle)
+		if (g_config.protection.misc.idle)
 		{
 			*script_global(1644209).at(1149).as<int*>() = 0;
 			*script_global(1644209).at(1165).as<int*>() = 0;

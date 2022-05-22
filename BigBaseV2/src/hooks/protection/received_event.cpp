@@ -28,35 +28,53 @@ namespace big
 				return;
 			}
 
-			//Commenting this out for now, it is causing me to crash. Will look into it later.
-			// 
-			////If player is joining, and not already in the lobby
-			//if (source_player->m_player_id < 0 || source_player->m_player_id >= 32)
-			//{
-			//	switch ((RockstarEvent)event_id)
-			//	{
-			//		//Blocking these can either crash you or cause weird issues
-			//	case RockstarEvent::REMOTE_SCRIPT_INFO_EVENT:
-			//	case RockstarEvent::REMOTE_SCRIPT_LEAVE_EVENT:
-			//	case RockstarEvent::NETWORK_CHECK_EXE_SIZE_EVENT:
-			//	case RockstarEvent::NETWORK_GARAGE_OCCUPIED_STATUS_EVENT:
-			//		break;
+			//If player is joining, and not already in the lobby
+			if (source_player->m_player_id < 0 || source_player->m_player_id >= 32)
+			{
+				switch ((RockstarEvent)event_id)
+				{
+					//Blocking these can either crash you or cause weird issues
+				case RockstarEvent::NETWORK_CHECK_EXE_SIZE_EVENT:
+				case RockstarEvent::NETWORK_ENTITY_AREA_STATUS_EVENT:
+				case RockstarEvent::GAME_WEATHER_EVENT: //Depricated
+				case RockstarEvent::UPDATE_PLAYER_SCARS_EVENT:
+				case RockstarEvent::OBJECT_ID_FREED_EVENT:
+				case RockstarEvent::NETWORK_TRAIN_REPORT_EVENT:
+					break;
 
-			//	default:
-			//		string msg = fmt::format(xorstr_("Purged unwanted protocol event: {} from: {}"), event_name, sender_name);
+				default:
+					string msg = fmt::format(xorstr_("Purged unwanted protocol event: {} from: {}"), event_name, sender_name);
 
-			//		LOG(WARNING) << msg;
-			//		if (g_config.settings.notify_debug)
-			//			g_notification_service->push_warning(xorstr_("Event Protocol"), msg);
+					LOG(WARNING) << msg;
+					if (g_config.settings.notify_debug)
+						g_notification_service->push_warning(xorstr_("Event Protocol"), msg);
 
-			//		//Block event, but theres no need to send anything back because we know they're valid (we just don't want them)
-			//		return;
-			//	}
-			//}
+					//Send event back to them
+					g_pointers->m_send_event_ack(event_manager, source_player, target_player, event_index, event_handled_bitset);
+
+					//Block event
+					return;
+				}
+			}
 		}
 
 		switch ((RockstarEvent)event_id)
 		{ //Begin switch case
+
+		//Modder detection
+		case RockstarEvent::REPORT_CASH_SPAWN_EVENT:
+		case RockstarEvent::NETWORK_CHECK_CODE_CRCS_EVENT:
+		case RockstarEvent::REPORT_MYSELF_EVENT:
+		{
+			if (g_config.protection.misc.modder_detection)
+			{
+				string msg = fmt::format(xorstr_("{} was flagged as a modder for sending unwanted events"), sender_name);
+
+				LOG(WARNING) << msg;
+				g_notification_service->push_warning(xorstr_("Modder detection"), msg);
+			}
+			break; //Pass
+		}
 
 		case RockstarEvent::SCRIPT_ENTITY_STATE_CHANGE_EVENT:
 		{
@@ -93,13 +111,12 @@ namespace big
 					buffer->Seek(0);
 				}
 			}
-
-			break;
+			break; //Pass
 		}
 
 		case RockstarEvent::SCRIPTED_GAME_EVENT:
 		{
-			if (g_config.protection.kick.script_events)
+			if (g_config.protection.events.script)
 			{
 				const auto scripted_game_event = std::make_unique<CScriptedGameEvent>();
 
@@ -111,6 +128,7 @@ namespace big
 				const auto args = scripted_game_event->m_args;
 				const auto hash = static_cast<eRemoteEvent>(args[0]);
 
+				//For debugging
 				if (g_config.settings.script_event_logger)
 				{
 					LOG(G3LOG_DEBUG) << xorstr_("===");
@@ -120,7 +138,7 @@ namespace big
 					LOG(G3LOG_DEBUG) << xorstr_("===");
 				}
 
-				//If the user sends us an unwanted event
+				//If the user sends us an unwanted script event
 				if (hooks::scripted_game_event(scripted_game_event.get(), source_player))
 				{
 					//Send event back to them
@@ -129,60 +147,23 @@ namespace big
 					//Block event
 					return;
 				}
-					
+
 				buffer->Seek(0);
 			}
+			break; //Pass
 
-			break;
+			//Go away
+		case RockstarEvent::NETWORK_TRAIN_REPORT_EVENT:
+		case RockstarEvent::NETWORK_TRAIN_REQUEST_EVENT:
+			return;
 		}
 
 		} //End switch case
 
-		if (g_config.protection.kick.game_events)
-		{
-			//todo: add game event protection
-		}
-
-		//I know having multiple cases is stupid, but it's just a placeholder for now.
-		if (g_config.protection.misc.modder_detection)
-		{
-			switch ((RockstarEvent)event_id)
-			{ //Begin switch case
-
-			case RockstarEvent::REPORT_CASH_SPAWN_EVENT:
-			{
-				uint32_t money;
-
-				buffer->Seek(64);
-				buffer->ReadDword(&money, 32);
-				buffer->Seek(0);
-
-				if (money >= 2000)
-				{
-					string msg = fmt::format(xorstr_("{} was flagged as a modder for spawning cash"), sender_name);
-
-					LOG(WARNING) << msg;
-					g_notification_service->push_warning(xorstr_("Modder detection"), msg);
-				}
-
-				//Block event, we don't want them spawning anything on us
-				return;
-			}
-
-			case RockstarEvent::NETWORK_CHECK_CODE_CRCS_EVENT:
-			case RockstarEvent::REPORT_MYSELF_EVENT:
-			{
-				string msg = fmt::format(xorstr_("{} was flagged as a modder for sending unwanted events"), sender_name);
-
-				LOG(WARNING) << msg;
-				g_notification_service->push_warning(xorstr_("Modder detection"), msg);
-
-				//Pass event
-				break;
-			}
-			}
-
-		} //End switch case
+		//if (g_config.protection.events.game)
+		//{
+		//	//todo: add game event protection
+		//}
 
 		return g_hooking->m_received_event_hook.get_original<decltype(&received_event)>()(event_manager, source_player, target_player, event_id, event_index, event_handled_bitset, unk, buffer);
 	}

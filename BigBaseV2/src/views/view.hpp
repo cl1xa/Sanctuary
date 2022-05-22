@@ -23,7 +23,7 @@ namespace big
 	class view_sub
 	{
 	public:
-		static void tab_kick();
+		static void tab_events();
 		static void tab_crash();
 		static void tab_sync();
 		static void tab_misc();

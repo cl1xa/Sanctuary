@@ -30,6 +30,10 @@ namespace big
 			//https://github.com/Yimura/YimMenu/discussions/143
 			add_native_detour(RAGE_JOAAT("freemode"), 0x5D10B3795F3FC886, freemode::NETWORK_HAS_RECEIVED_HOST_BROADCAST_DATA);
 
+			//TODO:
+			//https://github.com/cl52902/SaltyV2/blob/1ea5c7742408f2b34795da5baccc328c48f74a12/Salty/src/gui/misc.cpp#L752
+			//https://github.com/cl52902/SaltyV2/blob/1ea5c7742408f2b34795da5baccc328c48f74a12/Salty/src/gui/misc.cpp#L779
+
 			for (const auto& native_detours_for_script : m_native_registrations)
 				if (const GtaThread* thread = gta_util::find_script_thread(native_detours_for_script.first); thread != nullptr && thread->m_context.m_state == rage::eThreadState::running)
 					this->check_for_thread(thread);

@@ -11,7 +11,7 @@ namespace big
 		ImGui::SetNextWindowSize(ImVec2{ 750, 400 }, ImGuiCond_Once);
 		ImGui::SetNextWindowPos(ImVec2{ 100, 200 }, ImGuiCond_Once);
 
-		tabs = tabs = { xorstr_("Kick"), xorstr_("Crash"), xorstr_("Sync"), xorstr_("Misc"), xorstr_("Network"), xorstr_("Settings") };
+		tabs = tabs = { xorstr_("Events"), xorstr_("Crash"), xorstr_("Sync"), xorstr_("Misc"), xorstr_("Network"), xorstr_("Settings") };
 
 		if (ImGui::Begin(xorstr_("Sanctuary"), &g_gui.m_opened, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize))
 		{
@@ -30,7 +30,7 @@ namespace big
 				switch (selected_tab)
 				{
 				case 0:
-					view_sub::tab_kick();
+					view_sub::tab_events();
 					break;
 				case 1:
 					view_sub::tab_crash();
