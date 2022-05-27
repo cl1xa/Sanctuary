@@ -16,7 +16,6 @@
 namespace big
 {
 	hooking::hooking() :
-		// Swapchain
 		m_swapchain_hook(*g_pointers->m_swapchain, hooks::swapchain_num_funcs),
 
 		m_set_cursor_pos_hook("SetCursorPos", memory::module("user32.dll").get_export("SetCursorPos").as<void*>(), &hooks::set_cursor_pos),
@@ -26,27 +25,27 @@ namespace big
 		m_gta_thread_start_hook("GTA Thead Start", g_pointers->m_gta_thread_start, &hooks::gta_thread_start),
 		m_gta_thread_kill_hook("GTA Thread Kill", g_pointers->m_gta_thread_kill, &hooks::gta_thread_kill),
 
-		m_network_player_mgr_shutdown_hook("Network Player Mgr Shutdown", g_pointers->m_network_player_mgr_shutdown, &hooks::network_player_mgr_shutdown),
-
-		m_network_group_override_hook("Network Group Override", g_pointers->m_network_group_override, &hooks::network_group_override),
-
-		m_net_array_handler_hook("Net Array Handler", g_pointers->m_net_array_handler, &hooks::net_array_handler),
-
-		m_increment_stat_hook("Increment Stat Event", g_pointers->m_increment_stat_event, &hooks::increment_stat_event),
-
 		m_is_dlc_present_hook("Is DLC Present", g_pointers->m_is_dlc_present, &hooks::is_dlc_present),
 
-		m_received_event_hook("Received Event", g_pointers->m_received_event, &hooks::received_event),
+		m_chat_receive_hook("Chat Receive", g_pointers->m_chat_receive, &hooks::chat_receive),
 
 		m_send_net_info_to_lobby("Send NET Info to Lobby", g_pointers->m_send_net_info_to_lobby, &hooks::send_net_info_to_lobby),
 
+		m_network_player_mgr_shutdown_hook("Network Player Mgr Shutdown", g_pointers->m_network_player_mgr_shutdown, &hooks::network_player_mgr_shutdown),
 		m_player_has_joined_hook("Player Has Joined", g_pointers->m_player_has_joined, &hooks::player_join),
 		m_player_has_left_hook("Player Has Left", g_pointers->m_player_has_left, &hooks::player_leave),
+
+		m_network_group_override_hook("Network Group Override", g_pointers->m_network_group_override, &hooks::network_group_override),
+		m_net_array_handler_hook("Net Array Handler", g_pointers->m_net_array_handler, &hooks::net_array_handler),
+
+		m_received_event_hook("Received Event", g_pointers->m_received_event, &hooks::received_event),
 
 		m_receive_net_message_hook("Receive Net Message", g_pointers->m_receive_net_message, &hooks::receive_net_message),
 		m_get_network_event_data_hook("Get Network Event Data", g_pointers->m_get_network_event_data, &hooks::get_network_event_data),
 
-		m_chat_receive_hook("Chat Receive", g_pointers->m_chat_receive, &hooks::chat_receive)
+		m_increment_stat_hook("Increment Stat Event", g_pointers->m_increment_stat_event, &hooks::increment_stat_event),
+
+		m_received_clone_sync_hook("Received Clone Sync", g_pointers->m_received_clone_sync, &hooks::received_clone_sync)
 	{
 		m_swapchain_hook.hook(hooks::swapchain_present_index, &hooks::swapchain_present);
 		m_swapchain_hook.hook(hooks::swapchain_resizebuffers_index, &hooks::swapchain_resizebuffers);
@@ -74,26 +73,27 @@ namespace big
 		m_gta_thread_start_hook.enable();
 		m_gta_thread_kill_hook.enable();
 
+		m_is_dlc_present_hook.enable();
+
+		m_chat_receive_hook.enable();
+
+		m_send_net_info_to_lobby.enable();
+
 		m_network_player_mgr_shutdown_hook.enable();
-		m_network_group_override_hook.enable();
-
-		m_net_array_handler_hook.enable();
-
 		m_player_has_joined_hook.enable();
 		m_player_has_left_hook.enable();
 
-		m_increment_stat_hook.enable();
-
-		m_is_dlc_present_hook.enable();
+		m_network_group_override_hook.enable();
+		m_net_array_handler_hook.enable();
 
 		m_received_event_hook.enable();
-
-		m_send_net_info_to_lobby.enable();
 
 		m_receive_net_message_hook.enable();
 		m_get_network_event_data_hook.enable();
 
-		m_chat_receive_hook.enable();
+		m_increment_stat_hook.enable();
+
+		m_received_clone_sync_hook.enable();
 
 		m_enabled = true;
 
@@ -104,26 +104,27 @@ namespace big
 	{
 		m_enabled = false;
 
-		m_chat_receive_hook.disable();
+		m_received_clone_sync_hook.disable();
+
+		m_increment_stat_hook.disable();
 
 		m_get_network_event_data_hook.disable();
 		m_receive_net_message_hook.disable();
 
-		m_send_net_info_to_lobby.disable();
-
 		m_received_event_hook.disable();
 
-		m_is_dlc_present_hook.disable();
-
-		m_increment_stat_hook.disable();
-
-		m_player_has_joined_hook.disable();
-		m_player_has_left_hook.disable();
-
 		m_net_array_handler_hook.disable();
-
 		m_network_group_override_hook.disable();
+
+		m_player_has_left_hook.disable();
+		m_player_has_joined_hook.disable();
 		m_network_player_mgr_shutdown_hook.disable();
+
+		m_send_net_info_to_lobby.disable();
+
+		m_chat_receive_hook.disable();
+
+		m_is_dlc_present_hook.disable();
 
 		m_gta_thread_kill_hook.disable();
 		m_gta_thread_start_hook.disable();

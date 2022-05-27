@@ -20,9 +20,6 @@ namespace big
 				bool block_main_script = false;
 				bool event_protocol_cleanup = false;
 				bool script = false;
-				//bool game = false;
-				//bool action = false;
-				//bool control = false;
 
 			}events;
 
@@ -37,6 +34,7 @@ namespace big
 			struct 
 			{
 				bool host_desync = false;
+				bool clone_sync = false;
 
 			}sync;
 

@@ -16,6 +16,9 @@ namespace big
 		explicit pointers();
 		~pointers();
 	public:
+		int* m_resolution_x;
+		int* m_resolution_y;
+
 		HWND m_hwnd{};
 
 		eGameState *m_game_state{};
@@ -41,49 +44,42 @@ namespace big
 
 		IDXGISwapChain **m_swapchain{};
 
-		int* m_resolution_x;
-		int* m_resolution_y;
-
-		PVOID m_blame_explode;
-		PVOID m_model_spawn_bypass;
 		PVOID m_native_return;
 		PVOID m_is_dlc_present;
-		PVOID m_network_group_override;
-
-		FriendRegistry* m_friend_registry{};
-
-		functions::get_screen_coords_for_world_coords* m_get_screen_coords_for_world_coords{};
 
 		PVOID m_gta_thread_start{};
 		PVOID m_gta_thread_kill{};
 
-		PVOID m_network_player_mgr_shutdown;
-		PVOID m_net_array_handler;
+		PVOID m_chat_receive{};
 
+		PVOID m_send_net_info_to_lobby{};
+		PVOID m_network_group_override;
+		PVOID m_net_array_handler;
+		FriendRegistry* m_friend_registry{};
+		PVOID m_network_player_mgr_shutdown;
 		PVOID m_player_has_joined{};
 		PVOID m_player_has_left{};
 
-		functions::get_gameplay_cam_coords* m_get_gamplay_cam_coords;
+		//Event Signatures START
+		PVOID m_receive_net_message{};
+		PVOID m_get_network_event_data{};
 
-		functions::increment_stat_event* m_increment_stat_event{};
-		
-		functions::trigger_script_event* m_trigger_script_event{};
-
-		// Received Event Signatures START
 		functions::read_bitbuf_array* m_read_bitbuf_array{};
 		functions::read_bitbuf_dword* m_read_bitbuf_dword{};
 		PVOID m_received_event{};
 		functions::send_event_ack* m_send_event_ack{};
-		// Received Event Signatures END
 
-		PVOID m_send_net_info_to_lobby{};
+		functions::increment_stat_event* m_increment_stat_event{};
+		functions::trigger_script_event* m_trigger_script_event{};
+		//Event Signatures END
 
-		PVOID m_receive_net_message{};
-		PVOID m_get_network_event_data{};
-
-		PVOID m_chat_receive{};
-
-		PUSHORT m_spectator_check;
+		//SyncTree Signatures START
+		PVOID m_received_clone_sync;
+		functions::get_sync_tree_for_type* m_get_sync_tree_for_type{};
+		functions::get_sync_type_info* m_get_sync_type_info{};
+		functions::get_net_object* m_get_net_object{};
+		functions::get_net_object_for_player* m_get_net_object_for_player{};
+		//SyncTree Signatures END
 	};
 
 	inline pointers *g_pointers{};

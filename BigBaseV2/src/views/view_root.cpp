@@ -5,7 +5,7 @@ namespace big
 {
 	void view_main::root()
 	{
-		static int selected_tab = 0;
+		static size_t selected_tab = 0;
 		static vector<string> tabs;
 
 		ImGui::SetNextWindowSize(ImVec2{ 750, 400 }, ImGuiCond_Once);
