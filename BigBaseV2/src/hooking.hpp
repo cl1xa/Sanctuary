@@ -32,7 +32,10 @@ namespace big
 		static __int64* chat_receive(__int64 chat_pointer, __int64 unk2, __int64 peerId, const char* msg, char IsTeam);
 
 		static bool send_net_info_to_lobby(rage::netPlayerData* player, int64_t a2, int64_t a3, DWORD* a4);
+
+		static void network_player_mgr_init(CNetworkPlayerMgr* _this, std::uint64_t a2, std::uint32_t a3, std::uint32_t a4[4]);
 		static void network_player_mgr_shutdown(CNetworkPlayerMgr* _this);
+
 		static void player_join(CNetworkObjectMgr* _this, CNetGamePlayer* net_player);
 		static void player_leave(CNetworkObjectMgr* _this, CNetGamePlayer* net_player);
 
@@ -87,7 +90,9 @@ namespace big
 
 		detour_hook m_send_net_info_to_lobby;
 
+		detour_hook m_network_player_mgr_init_hook;
 		detour_hook m_network_player_mgr_shutdown_hook;
+
 		detour_hook m_player_has_joined_hook;
 		detour_hook m_player_has_left_hook;
 

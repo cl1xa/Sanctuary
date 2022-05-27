@@ -24,7 +24,7 @@ namespace big
 				
 			g_notification_service->push("Player Info Spoofing", "Sent spoofed values to lobby host.");*/
 
-			LOG(G3LOG_DEBUG) << "Connected to multiplayer session";
+			LOG(G3LOG_DEBUG) << "Connected to multiplayer session!";
 		}
 
 		return g_hooking->m_send_net_info_to_lobby.get_original<decltype(&hooks::send_net_info_to_lobby)>()(player, a2, a3, a4);

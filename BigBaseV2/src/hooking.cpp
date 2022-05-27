@@ -31,7 +31,9 @@ namespace big
 
 		m_send_net_info_to_lobby("Send NET Info to Lobby", g_pointers->m_send_net_info_to_lobby, &hooks::send_net_info_to_lobby),
 
+		m_network_player_mgr_init_hook("Network Player Mgr Init", g_pointers->m_network_player_mgr_init, &hooks::network_player_mgr_init),
 		m_network_player_mgr_shutdown_hook("Network Player Mgr Shutdown", g_pointers->m_network_player_mgr_shutdown, &hooks::network_player_mgr_shutdown),
+
 		m_player_has_joined_hook("Player Has Joined", g_pointers->m_player_has_joined, &hooks::player_join),
 		m_player_has_left_hook("Player Has Left", g_pointers->m_player_has_left, &hooks::player_leave),
 
@@ -79,7 +81,9 @@ namespace big
 
 		m_send_net_info_to_lobby.enable();
 
+		m_network_player_mgr_init_hook.enable();
 		m_network_player_mgr_shutdown_hook.enable();
+
 		m_player_has_joined_hook.enable();
 		m_player_has_left_hook.enable();
 
@@ -118,7 +122,9 @@ namespace big
 
 		m_player_has_left_hook.disable();
 		m_player_has_joined_hook.disable();
+
 		m_network_player_mgr_shutdown_hook.disable();
+		m_network_player_mgr_init_hook.disable();
 
 		m_send_net_info_to_lobby.disable();
 

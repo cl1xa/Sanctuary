@@ -67,7 +67,7 @@ namespace big
 				}
 			}
 
-			LOG(INFO) << fmt::format(xorstr_("Requested script: {}"), script_name);
+			//LOG(INFO) << fmt::format(xorstr_("Requested script: {}"), script_name);
 			SCRIPT::REQUEST_SCRIPT(script_name);
 		}
 	}

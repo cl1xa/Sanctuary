@@ -53,12 +53,17 @@ namespace big
 		PVOID m_chat_receive{};
 
 		PVOID m_send_net_info_to_lobby{};
-		PVOID m_network_group_override;
-		PVOID m_net_array_handler;
+	
 		FriendRegistry* m_friend_registry{};
+
+		PVOID m_network_player_mgr_init;
 		PVOID m_network_player_mgr_shutdown;
+
 		PVOID m_player_has_joined{};
 		PVOID m_player_has_left{};
+
+		PVOID m_network_group_override;
+		PVOID m_net_array_handler;
 
 		//Event Signatures START
 		PVOID m_receive_net_message{};

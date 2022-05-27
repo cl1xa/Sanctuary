@@ -38,7 +38,6 @@ namespace big
 		if (CPlayerInfo* player_info = this->get_player_info(); player_info != nullptr)
 			if (CPed* ped = player_info->m_ped; ped != nullptr)
 				return ped;
-
 		return nullptr;
 	}
 
@@ -75,33 +74,33 @@ namespace big
 		return net_game_player == m_net_game_player;
 	}
 
-	string player::to_lowercase_identifier()
+	std::string player::to_lowercase_identifier()
 	{
-		string lower = this->get_name();
-		transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
+		std::string lower = this->get_name();
+		std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
 
 		return lower;
 	}
 
 	player_service::player_service()
 	{
-		if (CNetworkPlayerMgr* network_player_mgr = gta_util::get_network_player_mgr())
-		{
-			for (size_t i = 0; i < network_player_mgr->m_player_limit; i++)
-			{
-				if (CNetGamePlayer* net_game_player = network_player_mgr->m_player_list[i]; net_game_player != nullptr)
-				{
-					unique_ptr<player> plyr = make_unique<player>(net_game_player);
-					plyr->m_is_friend = friends_service::is_friend(plyr);
-
-					m_players.emplace(plyr->to_lowercase_identifier(), move(plyr));
-				}
-			}
-		}
+		g_player_service = this;
 
 		m_dummy_player = new player(nullptr);
 
-		g_player_service = this;
+		auto network_player_mgr = gta_util::get_network_player_mgr();
+		if (!network_player_mgr)
+			return;
+
+		auto net_game_player = network_player_mgr->m_local_net_player;
+		if (!net_game_player)
+			return;
+
+		for (uint16_t i = 0; i < network_player_mgr->m_player_limit; ++i)
+		{
+			net_game_player = network_player_mgr->m_player_list[i];
+			player_join(net_game_player);
+		}
 	}
 
 	player_service::~player_service()
@@ -117,19 +116,18 @@ namespace big
 		m_players.clear();
 	}
 
-	player* player_service::get_by_name(string name)
+	player* player_service::get_by_name(std::string name)
 	{
-		transform(name.begin(), name.end(), name.begin(), ::tolower);
+		std::transform(name.begin(), name.end(), name.begin(), ::tolower);
 
 		if (auto it = m_players.find(name); it != m_players.end())
 			return it->second.get();
-
 		return nullptr;
 	}
 
 	player* player_service::get_by_msg_id(uint32_t msg_id)
 	{
-		map<string, unique_ptr<player>>::iterator it;
+		std::map<std::string, std::unique_ptr<player>>::iterator it;
 		for (it = m_players.begin(); it != m_players.end(); it++)
 		{
 			if (it->second.get()->get_net_game_player()->m_msg_id == msg_id)
@@ -140,7 +138,7 @@ namespace big
 
 	player* player_service::get_by_host_token(uint64_t token)
 	{
-		map<string, unique_ptr<player>>::iterator it;
+		std::map<std::string, std::unique_ptr<player>>::iterator it;
 		for (it = m_players.begin(); it != m_players.end(); it++)
 		{
 			if (it->second.get()->get_net_data()->m_host_token == token)
@@ -156,24 +154,24 @@ namespace big
 
 	void player_service::player_join(CNetGamePlayer* net_game_player)
 	{
-		if (net_game_player == nullptr)
-			return;
+		if (net_game_player == nullptr) return;
 
-		unique_ptr<player> plyr = make_unique<player>(net_game_player);
+		std::unique_ptr<player> plyr = std::make_unique<player>(net_game_player);
 		plyr->m_is_friend = friends_service::is_friend(plyr);
 
-		m_players.emplace(plyr->to_lowercase_identifier(), move(plyr));
+		m_players.emplace(
+			plyr->to_lowercase_identifier(),
+			std::move(plyr)
+		);
 	}
 
 	void player_service::player_leave(CNetGamePlayer* net_game_player)
 	{
-		if (net_game_player == nullptr)
-			return;
-
+		if (net_game_player == nullptr) return;
 		if (m_selected_player && m_selected_player->equals(net_game_player))
 			m_selected_player = nullptr;
 
-		unique_ptr<player> plyr = make_unique<player>(net_game_player);
+		std::unique_ptr<player> plyr = std::make_unique<player>(net_game_player);
 		m_players.erase(plyr->to_lowercase_identifier());
 	}
 
