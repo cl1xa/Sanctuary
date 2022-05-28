@@ -33,12 +33,8 @@ namespace big
 		case RockstarEvent::REPORT_MYSELF_EVENT:
 		{
 			if (g_config.protection.misc.modder_detection)
-			{
-				string msg = fmt::format(xorstr_("{} was flagged as a modder for sending unwanted events"), sender_name);
+				g_notification_service->push_warning(xorstr_("Modder detection"), fmt::format(xorstr_("{} was flagged as a modder for sending unwanted events"), sender_name));
 
-				LOG(WARNING) << msg;
-				g_notification_service->push_warning(xorstr_("Modder detection"), msg);
-			}
 			break; //Pass
 		}
 
@@ -62,10 +58,7 @@ namespace big
 
 					if (action >= 16 && action <= 18)
 					{
-						string msg = fmt::format(xorstr_("{} attempted to send TASK_VEHICLE_TEMP_ACTION crash"), sender_name);
-
-						LOG(WARNING) << msg;
-						g_notification_service->push_warning(xorstr_("Protection"), msg);
+						g_notification_service->push_warning(xorstr_("Protection"), fmt::format(xorstr_("{} attempted to send TASK_VEHICLE_TEMP_ACTION crash"), sender_name));
 
 						//Send event back to them
 						g_pointers->m_send_event_ack(event_manager, source_player, target_player, event_index, event_handled_bitset);

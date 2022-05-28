@@ -9,11 +9,8 @@ namespace big
 
 		if (const char* name = new_thread->m_name; strlen(name) > 0)
 		{
-			string msg = fmt::format(xorstr_("Script Thread '{}' started"), name);
-
-			LOG(INFO) << msg;
 			if (g_config.settings.notify_scripts)
-				g_notification_service->push(xorstr_("Script Threads"), msg);
+				g_notification_service->push(xorstr_("Script Threads"), fmt::format(xorstr_("Script Thread '{}' started"), name));
 		}
 
 		if (new_thread != nullptr)

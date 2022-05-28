@@ -12,10 +12,7 @@ namespace big
 			{
 				if (auto entry_line = src->get_arg<const char*>(1); !strcmp(entry_line, "CTALERT_F_2"))
 				{
-					string msg = xorstr_("Purged transaction rate limit spam");
-
-					LOG(WARNING) << msg;
-					g_notification_service->push_warning(xorstr_("Rate Limit"), msg);
+					g_notification_service->push_warning(xorstr_("Rate Limit"), xorstr_("Purged transaction rate limit spam"));
 
 					*script_global(4529830).as<int*>() = 0;
 					return;

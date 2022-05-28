@@ -8,10 +8,7 @@ namespace big
 		{
 			if (datbitbuffer->m_bitsRead + bytes_to_read > datbitbuffer->m_curBit)
 			{
-				string msg = fmt::format(xorstr_("Received NET_ARRAY_ERROR crash from {}"), a2->get_name());
-
-				LOG(WARNING) << msg;
-				g_notification_service->push_warning(xorstr_("Protections"), msg);
+				g_notification_service->push_warning(xorstr_("Protections"), fmt::format(xorstr_("Received NET_ARRAY_ERROR crash from {}"), a2->get_name()));
 
 				return false;
 			}

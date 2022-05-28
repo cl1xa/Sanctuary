@@ -7,11 +7,8 @@ namespace big
 	{
 		if (g_config.settings.notify_debug)
 		{
-			string msg = xorstr_("Entering session and initializing player data");
-
-			LOG(G3LOG_DEBUG) << msg;
 			if (g_config.settings.notify_players)
-				g_notification_service->push(xorstr_("Network Player Mgr Init"), msg);
+				g_notification_service->push(xorstr_("Network Player Mgr Init"), xorstr_("Entering session and initializing player data"), true);
 		}
 
 		g_hooking->m_network_player_mgr_init_hook.get_original<decltype(&hooks::network_player_mgr_init)>()(_this, a2, a3, a4);
@@ -27,11 +24,8 @@ namespace big
 
 		if (g_config.settings.notify_debug)
 		{
-			string msg = xorstr_("Leaving session and cleaning up player data");
-
-			LOG(G3LOG_DEBUG) << msg;
 			if (g_config.settings.notify_players)
-				g_notification_service->push(xorstr_("Network Player Mgr Shutdown"), msg);
+				g_notification_service->push(xorstr_("Network Player Mgr Shutdown"), xorstr_("Leaving session and cleaning up player data"), true);
 		}
 
 		g_hooking->m_network_player_mgr_shutdown_hook.get_original<decltype(&hooks::network_player_mgr_shutdown)>()(_this);

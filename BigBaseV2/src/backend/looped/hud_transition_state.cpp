@@ -19,10 +19,7 @@ namespace big
 			//When freemode script loads, remove the loading screen
 			if (state == eTransitionState::TRANSITION_STATE_WAIT_JOIN_FM_SESSION && DLC::GET_IS_LOADING_SCREEN_ACTIVE())
 			{
-				string msg = fmt::format(xorstr_("Terminated loading screen: {}"), transition_states[(int)state]);
-
-				LOG(G3LOG_DEBUG) << msg;
-				g_notification_service->push(xorstr_("Transition State"), msg);
+				g_notification_service->push(xorstr_("Transition State"), fmt::format(xorstr_("Terminated loading screen: {}"), transition_states[(int)state]), true);
 
 				SCRIPT::SHUTDOWN_LOADING_SCREEN();
 			}

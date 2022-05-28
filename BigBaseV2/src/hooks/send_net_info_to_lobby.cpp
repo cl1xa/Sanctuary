@@ -20,11 +20,11 @@ namespace big
 				player->m_rockstar_id2 = g->spoofing.rockstar_id;
 			}
 
-			LOG(INFO) << "Sending spoofed values to session host";
+			LOG(INFO) << xorstr_("Sending spoofed values to session host");
 				
-			g_notification_service->push("Player Info Spoofing", "Sent spoofed values to lobby host.");*/
+			g_notification_service->push(xorstr_("Player Info Spoofing"), xorstr_("Sent spoofed values to lobby host."));*/
 
-			LOG(G3LOG_DEBUG) << "Connected to multiplayer session!";
+			g_notification_service->push(xorstr_("Session Info"), xorstr_("Connected to multiplayer session!"), true);
 		}
 
 		return g_hooking->m_send_net_info_to_lobby.get_original<decltype(&hooks::send_net_info_to_lobby)>()(player, a2, a3, a4);

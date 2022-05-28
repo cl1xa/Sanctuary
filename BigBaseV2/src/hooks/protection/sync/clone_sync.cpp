@@ -25,11 +25,7 @@ namespace big
 
 			if (invalidsync)
 			{
-				string msg = fmt::format("{} sent invalid sync type: {} | Type name: {}", std::string(src->get_name()), std::to_string(sync_type), tree_name);
-
-				LOG(INFO) << msg;
-				if (g_config.settings.notify_scripts)
-					g_notification_service->push_warning(xorstr_("Protection"), msg);
+				g_notification_service->push_warning(xorstr_("Protection"), fmt::format("{} sent invalid sync type: {} | Type name: {}", std::string(src->get_name()), std::to_string(sync_type), tree_name));
 
 				return 2;
 			}

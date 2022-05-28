@@ -28,7 +28,7 @@ namespace big
 		virtual ~notification_service();
 
 		void push(notification);
-		void push(std::string, std::string);
+		void push(std::string, std::string, bool debug = false);
 		void push_warning(std::string, std::string);
 		void push_error(std::string, std::string);
 		std::vector<notification> get();

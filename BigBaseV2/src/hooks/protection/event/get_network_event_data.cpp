@@ -11,10 +11,7 @@ namespace big
 		{
 			case 161: //CEventNetworkRemovedFromSessionDueToComplaints
 			{
-				string msg = fmt::format(xorstr_("Desycned from host"));
-
-				LOG(WARNING) << msg;
-				g_notification_service->push_warning(xorstr_("Protections"), msg);
+				g_notification_service->push_warning(xorstr_("Protections"), fmt::format(xorstr_("Desycned from host")));
 
 				return;
 			}

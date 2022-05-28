@@ -17,25 +17,35 @@ namespace big
 		this->notifications.emplace(hash<string>{}(n.message), n);
 	}
 
-	void notification_service::push(string title, string message)
+	void notification_service::push(string title, string message, bool debug)
 	{
 		this->push({ NotificationType::INFO, title, message, chrono::system_clock::now(), 3000.f , 1.f});
+
+		if (debug)
+			LOG(G3LOG_DEBUG) << fmt::format(xorstr_("{}"), message);
+		else
+			LOG(INFO) << fmt::format(xorstr_("{}"), message);
 	}
 
 	void notification_service::push_warning(string title, string message)
 	{
 		this->push({ NotificationType::WARNING, title, message, chrono::system_clock::now(), 3000.f , 1.f });
+
+		LOG(WARNING) << fmt::format(xorstr_("{}"), message);
 	}
 
 	void notification_service::push_error(string title, string message)
 	{
 		this->push({ NotificationType::DANGER, title, message, chrono::system_clock::now(), 3000.f , 1.f });
+
+		LOG(FATAL) << fmt::format(xorstr_("{}"), message);
 	}
 
 	vector<notification> notification_service::get()
 	{
 		vector<notification> notifications_to_sent;
 		vector<size_t> to_remove;
+
 		for (auto& n : this->notifications) 
 		{
 			chrono::time_point<chrono::system_clock> curTime = chrono::system_clock::now();

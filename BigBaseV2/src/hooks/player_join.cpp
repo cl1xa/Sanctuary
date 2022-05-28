@@ -12,11 +12,8 @@ namespace big
 		{
 			notify::above_map(fmt::format(xorstr_("<C>{}</C> joined."), net_player->get_name()));
 
-			string msg = fmt::format(xorstr_("{} JOINED, taking slot #{} with Rockstar ID: {}"), net_player_data->m_name, net_player->m_player_id, net_player_data->m_rockstar_id2);
-
-			LOG(INFO) << msg;
 			if (g_config.settings.notify_players)
-				g_notification_service->push(xorstr_("Player Joined"), msg);
+				g_notification_service->push(xorstr_("Player Joined"), fmt::format(xorstr_("{} JOINED, taking slot #{} with Rockstar ID: {}"), net_player_data->m_name, net_player->m_player_id, net_player_data->m_rockstar_id2));
 		}
 
 		return g_hooking->m_player_has_joined_hook.get_original<decltype(&hooks::player_join)>()(_this, net_player);

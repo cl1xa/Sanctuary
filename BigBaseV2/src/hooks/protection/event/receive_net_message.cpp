@@ -3,7 +3,6 @@
 
 namespace big
 {
-
 	inline bool get_message_type(rage::netConnection::MessageType& msg_type, rage::datBitBuffer& buffer)
 	{
 		uint32_t pos;

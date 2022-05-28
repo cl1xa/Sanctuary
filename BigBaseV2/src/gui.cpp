@@ -101,7 +101,7 @@ namespace big
 
 	void gui::script_init()
 	{
-		g_notification_service->push(xorstr_("Sanctuary successfully loaded"), xorstr_("Press DELETE to open the menu."));
+		g_notification_service->push(xorstr_("Sanctuary successfully loaded"), xorstr_("Press DELETE to open the menu."), true);
 	}
 
 	void gui::script_on_tick()

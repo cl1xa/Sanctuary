@@ -13,10 +13,7 @@ namespace big
 			//Duplicate chat message spam
 			if (msg == previous_message) 
 			{
-				string it = fmt::format(xorstr_("Duplicate chat message purged: {}"), msg);
-
-				LOG(WARNING) << it;
-				g_notification_service->push_warning(xorstr_("Protections"), it);
+				g_notification_service->push_warning(xorstr_("Protections"), fmt::format(xorstr_("Duplicate chat message purged: {}"), msg));
 
 				return nullptr;
 			}
