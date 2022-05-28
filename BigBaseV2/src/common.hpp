@@ -56,11 +56,12 @@
 #include "CPed.hpp"
 
 #include "services/notification_service.hpp"
-//#include "util/notify.hpp"
+#include "util/notify.hpp"
 
 #include "xorstr.hpp"
 
 using namespace std;
+using namespace big::notify;
 
 namespace big
 {
@@ -75,12 +76,4 @@ namespace big
 	inline std::atomic_bool g_running{ false };
 
 	inline CPed* g_local_player;
-}
-
-namespace self
-{
-	inline Ped ped;
-	inline Player id;
-	inline Vector3 pos;
-	inline Vehicle veh;
 }

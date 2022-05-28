@@ -16,7 +16,7 @@ namespace big
 			if (last_state == eTransitionState::TRANSITION_STATE_MAX)
 				last_state = state;
 
-			// When freemode script loads, remove the loading screen
+			//When freemode script loads, remove the loading screen
 			if (state == eTransitionState::TRANSITION_STATE_WAIT_JOIN_FM_SESSION && DLC::GET_IS_LOADING_SCREEN_ACTIVE())
 			{
 				string msg = fmt::format(xorstr_("Terminated loading screen: {}"), transition_states[(int)state]);
@@ -33,7 +33,7 @@ namespace big
 			if (HUD::BUSYSPINNER_IS_ON())
 				HUD::BUSYSPINNER_OFF();
 
-			// Sometimes when going into singleplayer, missions, or a transition, this one will remain on screen permanently
+			//Sometimes when going into singleplayer, missions, or a transition, this one will remain on the screen permanently
 			if (state == eTransitionState::TRANSITION_STATE_TERMINATE_MAINTRANSITION)
 				return;
 

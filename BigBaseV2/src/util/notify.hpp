@@ -2,11 +2,13 @@
 #include "CNetGamePlayer.hpp"
 #include "script.hpp"
 
+using namespace std;
+
 namespace big::notify
 {
-	inline void above_map(std::string_view text)
+	inline void above_map(string_view text)
 	{
-		std::string in = text.data();
+		string in = text.data();
 		const auto out = (fmt::format(xorstr_("{}"), in)).c_str();
 
 		HUD::SET_TEXT_OUTLINE();
@@ -17,9 +19,9 @@ namespace big::notify
 	}
 
 	// Shows a busy spinner till the value at the address equals the value passed or if timeout is hit
-	inline void busy_spinner(std::string_view text, int* address, int value, int timeout = 15)
+	inline void busy_spinner(string_view text, int* address, int value, int timeout = 15)
 	{
-		std::string in = text.data();
+		string in = text.data();
 		const auto out = (fmt::format(xorstr_("{}"), in)).c_str();
 
 		HUD::BEGIN_TEXT_COMMAND_BUSYSPINNER_ON("STRING");
@@ -27,18 +29,23 @@ namespace big::notify
 		HUD::END_TEXT_COMMAND_BUSYSPINNER_ON(3);
 
 		for (size_t i = 0; *address != value && i < (size_t)timeout * 100; i++)
-			script::get_current()->yield(10ms);
+			script::get_current()->yield(chrono::steady_clock::duration(10));
 		
 		HUD::BUSYSPINNER_OFF();
 	}
 
-	inline void display_help_text(std::string_view text)
+	inline void display_help_text(string_view text)
 	{
-		std::string in = text.data();
+		string in = text.data();
 		const auto out = (fmt::format(xorstr_("{}"), in)).c_str();
 
 		HUD::BEGIN_TEXT_COMMAND_DISPLAY_HELP("STRING");
 		HUD::ADD_TEXT_COMPONENT_SUBSTRING_PLAYER_NAME(out);
 		HUD::END_TEXT_COMMAND_DISPLAY_HELP(0, 0, 1, -1);
+	}
+
+	inline void fast_notification(string header, string text, bool log = true)
+	{
+
 	}
 }

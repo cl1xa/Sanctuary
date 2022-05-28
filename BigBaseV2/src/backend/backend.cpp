@@ -8,7 +8,7 @@ namespace big
 {
 	void backend_main::run_tick()
 	{
-		QUEUE_JOB_BEGIN_CLAUSE(= )
+		QUEUE_JOB_BEGIN_CLAUSE()
 		{
 			backend_looped::update_pointers();
 			backend_looped::hud_transition_state();

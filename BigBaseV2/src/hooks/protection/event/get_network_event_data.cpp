@@ -4,6 +4,7 @@ namespace big
 {
 	void hooks::get_network_event_data(__int64 a1, rage::CEventNetwork* net_event)
 	{
+		//Origin is long long, cast to __int64
 		__int64 event_type = net_event->get_type();
 
 		switch (event_type)
