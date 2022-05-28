@@ -1,4 +1,5 @@
 #pragma once
+#include "gta/structs.hpp"
 
 namespace big
 {
@@ -49,13 +50,11 @@ namespace big
 
 			if (g_config.protection.events.block_main_script)
 			{
-				const std::string blocked_script[] = { "DISABLED-MainTransition", "DISABLED-cellphone_controller" };
-
-				for (int a = 0; a < sizeof(blocked_script) / sizeof(blocked_script[0]); a++)
+				for (int a = 0; a < sizeof(blocked_scripts) / sizeof(blocked_scripts[0]); a++)
 				{
-					if (blocked_script[a] == script_name)
+					if (blocked_scripts[a] == script_name)
 					{
-						string msg = fmt::format("Blocked main script: {} from triggering", blocked_script[a]);
+						string msg = fmt::format("Blocked main script: {} from triggering", blocked_scripts[a]);
 
 						LOG(G3LOG_DEBUG) << msg;
 						if (g_config.settings.notify_debug)

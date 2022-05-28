@@ -95,6 +95,5 @@ namespace big
 			if (m_script_hooks.erase(gta_thread->m_script_hash))
 				LOG(INFO) << fmt::format(xorstr_("{} script terminated, cleaning up native hooks"), gta_thread->m_name);
 		}
-
 	};
 }
