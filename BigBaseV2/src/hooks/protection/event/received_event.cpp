@@ -56,7 +56,7 @@ namespace big
 					uint32_t action;
 					buffer->ReadDword(&action, 8);
 
-					if (action >= 16 && action <= 18)
+					if (action >= 15 && action <= 18)
 					{
 						g_notification_service->push_warning(xorstr_("Protection"), fmt::format(xorstr_("{} attempted to send TASK_VEHICLE_TEMP_ACTION crash"), sender_name));
 
