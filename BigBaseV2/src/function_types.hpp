@@ -9,10 +9,10 @@ namespace big::functions
 {
 	#pragma region ENGINE
 	using run_script_threads_t = bool(*)(std::uint32_t ops_to_execute);
-	using get_native_handler_t = rage::scrNativeHandler(*)(rage::scrNativeRegistrationTable*, rage::scrNativeHash);
-	using fix_vectors_t = void(*)(rage::scrNativeCallContext*);
+	using get_native_handler_t = rage::scrNativeHandler(*)(rage::scrNativeRegistrationTable* registration_table, rage::scrNativeHash hash);
+	using fix_vectors_t = void(*)(rage::scrNativeCallContext* call_ctx);
 
-	using ptr_to_handle = Object(rage::CObject* object);
+	using ptr_to_handle = Entity(*)(void* entity);
 	#pragma endregion
 
 	#pragma region EVENT
@@ -21,9 +21,9 @@ namespace big::functions
 
 	using send_event_ack = void(rage::netEventMgr* event_manager, CNetGamePlayer* source_player, CNetGamePlayer* target_player, int event_index, int event_handled_bitset);
 
-	using trigger_script_event = void(int event_group, int64_t* args, int arg_count, int player_bits);
+	using trigger_script_event = void(*)(int event_group, int64_t* args, int arg_count, int player_bits);
 
-	using increment_stat_event = bool(uint64_t net_event_struct, int64_t sender, int64_t a3);
+	using increment_stat_event = bool(*)(uint64_t net_event_struct, int64_t sender, int64_t a3);
 	#pragma endregion
 
 	#pragma region SYNC
