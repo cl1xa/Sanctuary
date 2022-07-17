@@ -16,7 +16,7 @@ they serve as a proof of concept for now.
 
 * //Script event handler
 * //Scripted game event protection
-* Host desync prevention (outdated)
+* Host desync prevention
 
 [CRASH PROTECTION]
 
@@ -24,9 +24,9 @@ they serve as a proof of concept for now.
 * SCRIPT_WORLD_STATE patch
 * TASK_VEHICLE_TEMP_ACTION patch
 
-//[SYNC PROTECTION]
+[SYNC PROTECTION]
 
-* None at the moment, trying to figure out a non ['Salty'](https://github.com/tecel007/Salty) way of doing it
+* Basic clone_sync protection
 
 [MISC PROTECTION]
 
