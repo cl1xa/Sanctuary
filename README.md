@@ -14,9 +14,10 @@ they serve as a proof of concept for now.
 
  (I understand these are basic features, but I'm working top down in terms of complexity. Everything will be added eventually)
 
+* Block main script
+* Script protocol cleanup
 * //Script event handler
 * //Scripted game event protection
-* Host desync prevention
 
 [CRASH PROTECTION]
 
@@ -26,24 +27,27 @@ they serve as a proof of concept for now.
 
 [SYNC PROTECTION]
 
-* Basic clone_sync protection
+* Basic Clone_sync protection
+* Host desync prevention
 
 [MISC PROTECTION]
 
-* Chat message handler
+* //Chat message handler
+* Purge duplicate chat messages
 * Terminate online loading screens
 * Remove transaction rate limit
-* Freemode script termiantion prevention (forced on upon injection)
-* Undetected player value spoofing
+* Player value spoofing (undetected)
+* Freemode script termiantion prevention (always on)
 
 [MISC FEATURES]
 
 * Modder detection
 * Optimize session loading
-* Event protocol cleanup
 * Session switcher
 * Playerlist
 * Notification feedback
-* Self netbail if stuck loading
+* Bail to singleplayer button
 * Event logger
 * Debug console log attachment window
+* Automatic save and load config system
+* Unload and inject anywhere safely
