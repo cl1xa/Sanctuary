@@ -47,6 +47,7 @@ namespace big
 				bool modder_detection = false;
 				bool optimize_loading = false;
 				//bool block_reports = false;
+				//bool block_stat_changes = false;
 
 			}misc;
 

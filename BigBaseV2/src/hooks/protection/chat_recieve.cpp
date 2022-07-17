@@ -15,7 +15,7 @@ namespace big
 			{
 				g_notification_service->push_warning(xorstr_("Protections"), fmt::format(xorstr_("Duplicate chat message purged: {}"), msg));
 
-				return nullptr;
+				return 0;
 			}
 
 			previous_message = msg;
