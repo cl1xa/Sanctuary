@@ -1,0 +1,5 @@
+* Complete changes from: https://github.com/YimMenu/YimMenu/commit/10f549183b20502b094eac941ccc3a6a04ca3618
+* Update player services
+* Script event handler
+* Scripted game event handler
+* Solution is due for code cleanup
