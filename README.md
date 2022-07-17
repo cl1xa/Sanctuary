@@ -34,6 +34,7 @@ they serve as a proof of concept for now.
 
 * //Chat message handler
 * Purge duplicate chat messages
+* Idle kick prevention
 * Terminate online loading screens
 * Remove transaction rate limit
 * Player value spoofing (undetected)
