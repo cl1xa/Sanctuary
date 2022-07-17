@@ -3,6 +3,7 @@
 
 namespace big
 {
+
 	inline bool get_message_type(rage::netConnection::MessageType& msg_type, rage::datBitBuffer& buffer)
 	{
 		uint32_t pos;
@@ -27,53 +28,65 @@ namespace big
 
 	bool hooks::receive_net_message(void* netConnectionManager, void* a2, rage::netConnection::InFrame* frame)
 	{
-		if (g_config.protection.sync.host_desync) //Add proper logging for this
+		if (frame->get_type() == 4)
 		{
-			if (frame->get_type() == 4)
+			rage::datBitBuffer buffer((uint8_t*)frame->m_data, frame->m_length);
+			buffer.m_flagBits = 1;
+			rage::netConnection::MessageType msg_type;
+
+			const auto player = g_player_service->get_by_msg_id(frame->m_msg_id);
+
+			if (player && get_message_type(msg_type, buffer))
 			{
-				rage::datBitBuffer buffer((uint8_t*)frame->m_data, frame->m_length);
-				buffer.m_flagBits = 1;
-				rage::netConnection::MessageType msg_type;
-
-				player* player = g_player_service->get_by_msg_id(frame->m_msg_id);
-
-				if (player && get_message_type(msg_type, buffer))
+				switch (msg_type)
 				{
-					switch (msg_type)
+					//Desync Kick
+				case rage::netConnection::MessageType::MsgNetComplaint:
+				{
+					uint64_t host_token{};
+					buffer.ReadQWord(&host_token, 64);
+
+					std::vector<CNetGamePlayer*> players;
+
+					uint32_t num_of_host_token{};
+					buffer.ReadDword(&num_of_host_token, 32);
+
+					if (num_of_host_token <= 64) 
 					{
-						//Host desync
-					case rage::netConnection::MessageType::MsgNetComplaint:
-					{
-						uint64_t host_token{};
-						buffer.ReadQWord(&host_token, 64);
 
-						vector<CNetGamePlayer*> players;
-
-						uint32_t num_of_host_token{};
-						buffer.ReadDword(&num_of_host_token, 32);
-
-						if (num_of_host_token <= 64)
+						std::vector<uint64_t> host_token_list{};
+						for (uint32_t i = 0; i < num_of_host_token; i++)
 						{
-							vector<uint64_t> host_token_list{};
 
-							for (uint32_t i = 0; i < num_of_host_token; i++)
-							{
-								uint64_t array_element{};
-								buffer.ReadQWord(&array_element, 64);
-								host_token_list.push_back(array_element);
+							uint64_t array_element{};
+							buffer.ReadQWord(&array_element, 64);
+							host_token_list.push_back(array_element);
 
-								if (CNetGamePlayer* net_player = g_player_service->get_by_host_token(array_element)->get_net_game_player())
+							const auto big_player = g_player_service->get_by_host_token(array_element);
+
+							if (big_player)
+								if (CNetGamePlayer* net_player = big_player->get_net_game_player())
 									players.push_back(net_player);
-							}
 						}
 
-						buffer.Seek(0);
-
-						players.at(0)->m_complaints = 10000;
-						return false;
 					}
 
+					buffer.Seek(0);
+
+					if (!players.empty())
+					{
+						const auto& player = players.at(0);
+
+						if (player && player->is_valid())
+						{
+							player->m_complaints = 65535;
+							g_notification_service->push_warning(xorstr_("Protection"), fmt::format(xorstr_("Blocked desync kick from: {}"), player->get_name()));
+						}
 					}
+
+					return false;
+				}
+
 				}
 			}
 		}
