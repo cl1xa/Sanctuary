@@ -2,17 +2,21 @@
 Sanctuary is a protection only mod menu base for GTA-V Online.
 Strictly for educational purposes only.
 
-This menu is currently in beta. 
-Many fundamental changes will be made very quickly throughout the development process.
+* This menu is currently in alpha and is unfinished. 
+* Many fundamental changes will be made very quickly throughout the development process.
+* Lots of features are messy and unoptimized at the moment,
+they serve as a proof of concept for now.
 
 ## Features
 #// = To be added in the near future
 
 [KICK PROTECTION]
 
-* Script event handler
-* Scripted game event protection
-* Host desync prevention
+ (I understand these are basic features, but I'm working top down in terms of complexity. Everything will be added eventually)
+
+* //Script event handler
+* //Scripted game event protection
+* Host desync prevention (outdated)
 
 [CRASH PROTECTION]
 
@@ -30,6 +34,7 @@ Many fundamental changes will be made very quickly throughout the development pr
 * Terminate online loading screens
 * Remove transaction rate limit
 * Freemode script termiantion prevention (forced on upon injection)
+* Undetected player value spoofing
 
 [MISC FEATURES]
 
@@ -38,5 +43,7 @@ Many fundamental changes will be made very quickly throughout the development pr
 * Event protocol cleanup
 * Session switcher
 * Playerlist
-* Custom notification feedback
+* Notification feedback
 * Self netbail if stuck loading
+* Event logger
+* Debug console log attachment window
