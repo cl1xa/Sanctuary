@@ -30,19 +30,21 @@ namespace big
 			{
 				if (*g_pointers->m_is_session_started)
 				{
-					if (ImGui::BeginListBox(xorstr_("##plist"), { 580 , 315 })) //Gross hardcoded values, but whatever.
-					{
-						for (auto& item : g_player_service->m_players)
-						{
-							const auto& plyr = item.second;
-							const char* who = plyr->get_name();
+					const auto player_count = g_player_service->players().size() + 1; // +1 is you
 
-							if (plyr->is_host())
-								ImGui::TextColored(ImVec4(1.000f, 0.879f, 0.000f, 1.000f), who);
-							else if (plyr->is_friend())
-								ImGui::TextColored(ImVec4(0.365f, 0.714f, 0.898f, 1.000f), who);
-							else
-								ImGui::Text(who);
+					ImGui::Text(fmt::format(xorstr_("Players in session: {}"), g_player_service->players().size() + 1).c_str());
+
+					if (ImGui::BeginListBox("##players", { 350.f - ImGui::GetStyle().WindowPadding.x * 2 , 285 }))
+					{
+						ImGui::Text(g_player_service->get_self()->get_name());
+
+						ImGui::Separator();
+
+						for (const auto& [_, player] : g_player_service->players())
+						{
+							ImGui::PushID(player->id());
+							ImGui::Text(player->get_name());
+							ImGui::PopID();
 						}
 
 						ImGui::EndListBox();
