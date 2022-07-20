@@ -19,6 +19,9 @@ namespace big
 
 			if (null || catalog || valid)
 			{
+				if (g_config.settings.notify_debug)
+					g_notification_service->push_warning(xorstr_("Event protocol"), fmt::format(xorstr_("{} sent unwanted event protocol data"), sender_name));
+
 				g_pointers->m_send_event_ack(event_manager, source_player, target_player, event_index, event_handled_bitset); //Send event back to them
 
 				return; //Block event
