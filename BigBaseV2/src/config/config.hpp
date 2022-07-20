@@ -19,6 +19,11 @@ namespace big
 			{
 				bool block_main_script = false;
 				bool event_protocol_cleanup = false;
+
+				bool control = false;
+				bool action = false;
+				bool game = false;
+
 				bool script = false;
 
 			}events;

@@ -10,14 +10,14 @@ they serve as a proof of concept for now.
 ## Features
 #// = To be added in the near future
 
-[KICK PROTECTION]
-
- (I understand these are basic features, but I'm working top down in terms of complexity. Everything will be added eventually)
+[EVENT PROTECTION]
 
 * Block main script
 * Script protocol cleanup
-* //Script event handler
-* //Scripted game event protection
+* Control event protection
+* Action event protection
+* Unwanted game event protection
+* //Script event handler (Will be implemented soon)
 
 [CRASH PROTECTION]
 
