@@ -10,17 +10,18 @@ namespace big
 
 		if (g_config.protection.events.event_protocol_cleanup)
 		{
-			if (event_id > 91u)
-			{
-				g_pointers->m_send_event_ack(event_manager, source_player, target_player, event_index, event_handled_bitset);
-				return;
-			}
+			uint16_t _event_id = event_id;
+			const auto event_name = *(char**)((DWORD64)event_manager + 8i64 * _event_id + 243376);
 
-			const auto event_name = *(char**)((DWORD64)event_manager + 8i64 * event_id + 243376);
-			if (event_name == nullptr || source_player == nullptr || source_player->m_player_id < 0 || source_player->m_player_id >= 32)
+			bool null = (event_name == nullptr) || (source_player == nullptr);
+			bool catalog = ((RockstarEvent)event_id > RockstarEvent::NETWORK_CHECK_CATALOG_CRC) || (event_id > 91u);
+			bool valid = (source_player->m_player_id < 0) || (source_player->m_player_id >= 32);
+
+			if (null || catalog || valid)
 			{
-				g_pointers->m_send_event_ack(event_manager, source_player, target_player, event_index, event_handled_bitset);
-				return;
+				g_pointers->m_send_event_ack(event_manager, source_player, target_player, event_index, event_handled_bitset); //Send event back to them
+
+				return; //Block event
 			}
 		}
 
@@ -35,7 +36,7 @@ namespace big
 			if (g_config.protection.misc.modder_detection)
 				g_notification_service->push_warning(xorstr_("Modder detection"), fmt::format(xorstr_("{} was flagged as a modder for sending unwanted events"), sender_name));
 
-			break; //Pass
+			return; //Block event
 		}
 
 		case RockstarEvent::SCRIPT_ENTITY_STATE_CHANGE_EVENT:
@@ -60,11 +61,9 @@ namespace big
 					{
 						g_notification_service->push_warning(xorstr_("Protection"), fmt::format(xorstr_("{} attempted to send TASK_VEHICLE_TEMP_ACTION crash"), sender_name));
 
-						//Send event back to them
-						g_pointers->m_send_event_ack(event_manager, source_player, target_player, event_index, event_handled_bitset);
+						g_pointers->m_send_event_ack(event_manager, source_player, target_player, event_index, event_handled_bitset);//Send event back to them
 
-						//Block event
-						return;
+						return;	//Block event
 					}
 
 					buffer->Seek(0);
@@ -92,19 +91,19 @@ namespace big
 				{
 					LOG(G3LOG_DEBUG) << xorstr_("===");
 					LOG(G3LOG_DEBUG) << fmt::format(xorstr_("PLAYER: {} | EVENT: {}"), source_player->get_name(), int(hash));
+
 					for (size_t i = 1; i < sizeof(args); i++)
 						LOG(G3LOG_DEBUG) << fmt::format(xorstr_("Arg #{} : {}"), i, args[i]);
+
 					LOG(G3LOG_DEBUG) << xorstr_("===");
 				}
 
 				//If the user sends us an unwanted script event
 				if (hooks::scripted_game_event(scripted_game_event.get(), source_player))
 				{
-					//Send event back to them
-					g_pointers->m_send_event_ack(event_manager, source_player, target_player, event_index, event_handled_bitset);
+					g_pointers->m_send_event_ack(event_manager, source_player, target_player, event_index, event_handled_bitset); //Send event back to them
 
-					//Block event
-					return;
+					return;	//Block event
 				}
 
 				buffer->Seek(0);
@@ -118,11 +117,6 @@ namespace big
 		}
 
 		} //End switch case
-
-		//if (g_config.protection.events.game)
-		//{
-		//	//todo: add game event protection
-		//}
 
 		return g_hooking->m_received_event_hook.get_original<decltype(&received_event)>()(event_manager, source_player, target_player, event_id, event_index, event_handled_bitset, unk, buffer);
 	}
